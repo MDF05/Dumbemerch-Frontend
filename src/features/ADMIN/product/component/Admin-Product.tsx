@@ -1,0 +1,22 @@
+import { Button, Grid, HStack, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import TableProduct from "./Table-Product";
+import ModalPostProduct from "./Modal-Post-Product";
+export default function AdminProduct(): React.ReactNode {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  return (
+    <Grid gridTemplateColumns={"100%"} padding={"100px 50px"}>
+      <ModalPostProduct isOpen={isOpen} onClose={onClose} />
+      <VStack width={"100%"} alignItems={"start"} h={"100%"}>
+        <HStack justifyContent={"space-between"} width={"100%"}>
+          <Text color={"brand.baseColor"} textAlign={"start"}>
+            <b>List Product</b>
+          </Text>
+          <Button bg={"brand.active"} onClick={onOpen}>
+            add new product
+          </Button>
+        </HStack>
+        <TableProduct></TableProduct>
+      </VStack>
+    </Grid>
+  );
+}
