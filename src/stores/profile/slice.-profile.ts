@@ -32,8 +32,9 @@ const profileSlice = createSlice({
       .addCase(getProfileByIdUserLogin.rejected, (state) => {
         state.loading = false;
       })
-      .addCase(getProfileByIdUserLogin.fulfilled, (state) => {
+      .addCase(getProfileByIdUserLogin.fulfilled, (state, action) => {
         state.loading = false;
+        state.profile = action.payload; // reset profile state to avoid unnecessary re-renders
       });
     builder
       .addCase(putProfileUpdate.pending, (state) => {

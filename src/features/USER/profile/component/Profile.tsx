@@ -1,4 +1,4 @@
-import { Box, Button, Grid, HStack, Image, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, Grid, HStack, Image, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import profileImage from "../../../../assets/image/profile.png";
 import { useEffect, useState } from "react";
 import ModalEditProfile from "./Modal-Edit-Profile";

@@ -7,7 +7,7 @@ import { productSchema, ProductSchema } from "../../../../schemas/product-schema
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
 import { PostProductAsync } from "../../../../stores/product/async-product";
-import { ProductDTO } from "../../../../DTO/product-DTO";
+import { ProductDTO, ProductResponseDTO } from "../../../../DTO/product-DTO";
 import { ComponentModalPops } from "../../../../types/Component-Modal-Types";
 
 export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops) {
@@ -25,17 +25,18 @@ export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops
     try {
       const formData = new FormData();
       formData.append("name", event.name);
-      formData.append("category", event.category);
+      formData.append("category", `${event.category}`);
       formData.append("price", event.price);
       formData.append("quantity", event.quantity);
       formData.append("description", event.description);
+
       if (event.images.length !== 0) {
         for (let i of event.images) {
           formData.append("image", i);
         }
       }
 
-      const res: ProductDTO = await dispatch(PostProductAsync(formData)).unwrap();
+      const res: ProductResponseDTO = await dispatch(PostProductAsync(formData)).unwrap();
       reset();
     } catch (err) {}
   }

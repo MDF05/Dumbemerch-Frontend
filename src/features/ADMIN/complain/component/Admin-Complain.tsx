@@ -2,21 +2,19 @@ import { Button, FormControl, Grid, HStack, Input, VStack } from "@chakra-ui/rea
 import { useForm } from "react-hook-form";
 
 import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
-import ListChat from "./List-Chat";
-import { listAdmin } from "../utils/list-admin";
-import BoxChatUserLogin from "./User-Login-Box-Chat";
-import BoxChatUser from "./User-Box-Chat";
+import { io } from "socket.io-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageSchema, messageSchema } from "./../../../../schemas/message-schema";
 import { useAppSelector } from "../../../../stores/stores";
 import { ChatDTO } from "../../../../DTO/chat-dto";
+import ListChat from "./../../../USER/complain/component/List-Chat";
+import BoxChatUserLogin from "./../../../USER/complain/component/User-Login-Box-Chat";
+import BoxChatUser from "./../../../USER/complain/component/User-Box-Chat";
 
 const ChatComponent = () => {
   const { register, handleSubmit, reset } = useForm<MessageSchema>({ resolver: zodResolver(messageSchema) });
 
-  const [socketConnection, setSocketConnection] = useState<Socket>();
-
+  const socketConnection = io("http://localhost:3000");
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [chats, setChats] = useState<ChatDTO[]>([]);
 
@@ -26,53 +24,41 @@ const ChatComponent = () => {
   const senderId = auth?.user?.id;
 
   useEffect(() => {
-    setSocketConnection(io("http://localhost:3000"));
-    socketConnection?.on("data message", (data) => {
-      setChats((prev) => [...prev, data]);
-    });
-
-    if (receiverId && auth.user?.role == "USER") {
+    if (receiverId && auth.user?.role == "ADMIN") {
       const roomId = `${receiverId}${senderId}`;
-      socketConnection?.emit("send to server", { roomId, senderId, receiverId }); // cliet to server
+      socketConnection.emit("send to server", { roomId, senderId, receiverId }); // cliet to server
 
-      socketConnection?.on("send history to client", (data) => {
+      socketConnection.on("send history to client", (data) => {
+        // event listener from server
         setChats(data.chats);
       });
 
-      socketConnection?.on("data message", (msg) => {
+      socketConnection.on("data message", (msg) => {
         console.log("New message:", msg);
       });
 
       return () => {
-        socketConnection?.disconnect();
+        socketConnection.disconnect();
       };
-    } else if (auth.user?.role == "ADMIN" && receiverId == null) {
-      socketConnection?.emit("get room admin", { roomId: null, senderId, receiverId: null });
+    } else if (receiverId && auth.user?.role == "ADMIN") {
+      socketConnection.emit("send to server", { roomId: null, senderId, receiverId: null });
 
-      socketConnection?.on("send room admin", (data) => {
+      socketConnection.on("room chat admin", (data) => {
         setRoomAdmin(data);
       });
-    } else if (auth.user?.role == "ADMIN" && receiverId != null) {
-      const roomId = `${senderId}${receiverId}`;
-      socketConnection?.emit("send to server", { roomId, senderId, receiverId }); // cliet to server
-      socketConnection?.on("send history to client", (data) => {
-        // event listener from server
-        setChats(data.chats);
-      });
     }
-  }, [senderId, receiverId, auth?.user?.role]);
+  }, [senderId, receiverId, auth, socketConnection]);
 
   const handleSendMessage = (data: { message: string }) => {
-    const roomId: string = auth.user?.role === "USER" ? `${receiverId}${senderId}` : `${senderId}${receiverId}`;
-    const message = { message: data.message, roomId, senderId, receiverId };
-    socketConnection?.emit("message", message);
+    const message = { message: data.message, roomId: `${receiverId}${senderId}`, senderId, receiverId };
+    socketConnection.emit("message", message);
     reset();
   };
 
   return (
     <Grid height={"100vh"} gridTemplateColumns={"30% 70%"} overflow={"hidden"}>
       <VStack height={"100%"} borderRight={"1px solid"} borderColor={"brand.darkColor"} pt={"70px"} overflowY={"scroll"}>
-        <ListChat listChat={auth?.user?.role === "USER" ? listAdmin : roomAdmin} handleroom={setReceiverId} cursor={"pointer"}></ListChat>
+        <ListChat listChat={roomAdmin} handleroom={setReceiverId} cursor={"pointer"}></ListChat>
       </VStack>
       <VStack height={"100%"} padding={"20px"} position={"relative"} width={"100%"} overflow={"hidden"}>
         <VStack height={"90%"} width={"100%"} justifyContent={"start"} gap={"20px"} overflowY={"scroll"} overflowX={"hidden"} pt={"50px"}>

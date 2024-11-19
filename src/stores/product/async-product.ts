@@ -17,10 +17,10 @@ export const PostProductAsync = createAsyncThunk<ProductResponseDTO, ProductSche
   }
 });
 
-export const GetProductAsync = createAsyncThunk<ProductResponseDTO, any>("/product/get", async (data, thunkAPI) => {
+export const GetProductAsync = createAsyncThunk<ProductResponseDTO, void>("/product/get", async (data, thunkAPI) => {
   try {
     const res = await apiV1.get("/product");
-    return res.data;
+    return thunkAPI.fulfillWithValue(res.data);
   } catch (error: unknown) {
     if (isAxiosError(error)) {
       toast.error(error?.response?.data.message);

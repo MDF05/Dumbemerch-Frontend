@@ -1,8 +1,14 @@
 import { Button, Grid, HStack, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import TableProduct from "./Table-Product";
 import ModalPostProduct from "./Modal-Post-Product";
+import { useAppDispatch } from "../../../../stores/stores";
+import { GetProductAsync } from "../../../../stores/product/async-product";
 export default function AdminProduct(): React.ReactNode {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const dispatch = useAppDispatch();
+
+  dispatch(GetProductAsync());
+
   return (
     <Grid gridTemplateColumns={"100%"} padding={"100px 50px"}>
       <ModalPostProduct isOpen={isOpen} onClose={onClose} />

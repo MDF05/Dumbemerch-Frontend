@@ -1,7 +1,7 @@
 import { BoxProps } from "@chakra-ui/react";
-import { listRoomChatProps } from "./chat-props";
+import { listRoomTypes } from "./list-room-types";
 
 export interface ListChatProps extends BoxProps {
-  listChat: listRoomChatProps[];
-  handleroom: any;
+  listChat: listRoomTypes[];
+  handleroom: (data: number) => void;
 }

@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import { UserDTO } from "./../../../../DTO/user.DTO";
 import { checkAuth } from "./../../../../stores/auth/async";
 import { CheckTokenDTO } from "./../../../../DTO/check-token-DTO";
-import { useAppDispatch } from "./../../../../stores/stores";
+import { useAppDispatch, useAppSelector } from "./../../../../stores/stores";
 import { AuthState } from "./../../../../stores/auth/slice";
+import { responseDTO } from "../../../../DTO/response-DTO";
+import { cartDTO } from "../../../../DTO/cart-DTO";
+import { GetCartAsync } from "../../../../stores/cart/async-cart";
 
 export default function useBaseLayout(): useBaseLayoutProps {
   const { colorMode, toggleColorMode } = useColorMode();
-  const [user, setUser] = useState<UserDTO>({} as UserDTO);
+  const state = useAppSelector((state) => state.auth);
 
   const dispatch: ThunkDispatch<{ auth: AuthState }, undefined, UnknownAction> & Dispatch<UnknownAction> = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
@@ -23,11 +26,11 @@ export default function useBaseLayout(): useBaseLayoutProps {
       if (!token) navigate("/login");
       else {
         const info: CheckTokenDTO = await dispatch(checkAuth("check")).unwrap();
-        setUser(info.user);
+        const cart: responseDTO<cartDTO> = await dispatch(GetCartAsync()).unwrap();
         if (info.token == "invalid") navigate("/login");
       }
     })();
   }, []);
 
-  return { colorMode, toggleColorMode, pathname, user };
+  return { colorMode, toggleColorMode, pathname, user: state.user as UserDTO };
 }

@@ -3,10 +3,10 @@ import ModalPostCategory from "./Modal-Post-Category";
 import TableCategory from "./Table-Category";
 import { useAppDispatch } from "../../../../stores/stores";
 import { GetCategoryAsync } from "../../../../stores/category/async-category";
-import { useEffect } from "react";
 
 export default function AdminCategory(): React.ReactNode {
   const { isOpen, onClose, onOpen } = useDisclosure();
+
   const dispatch = useAppDispatch();
   dispatch(GetCategoryAsync());
 

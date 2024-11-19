@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { productSchema, ProductSchema } from "../../../../schemas/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
-import { PostProductAsync, PutProductAsync } from "../../../../stores/product/async-product";
+import { PutProductAsync } from "../../../../stores/product/async-product";
 import { ProductResponseDTO } from "../../../../DTO/product-DTO";
 import { ComponentModalPops } from "../../../../types/Component-Modal-Types";
 import { useLocation } from "react-router-dom";
@@ -36,7 +36,6 @@ export default function ModalEditProduct({ isOpen, onClose }: ComponentModalPops
 
   async function onSubmitProduct(event: ProductSchema) {
     try {
-      console.log(event);
       const formData = new FormData();
       formData.append("name", event.name);
       event.category && formData.append("category", event.category);
@@ -50,7 +49,6 @@ export default function ModalEditProduct({ isOpen, onClose }: ComponentModalPops
       }
 
       const res: ProductResponseDTO = await dispatch(PutProductAsync({ formData, productId: stateProduct.product.id })).unwrap();
-      console.log(res);
     } catch (err) {}
   }
 
@@ -154,7 +152,7 @@ export default function ModalEditProduct({ isOpen, onClose }: ComponentModalPops
               </FormControl>
               <Box w={"full"} mt={"40px"}>
                 <Button bg={"brand.succes"} w={"full"} border={"1px solid"} borderColor={"brand.baseColor"} type="submit">
-                  upload
+                  update
                 </Button>
               </Box>
             </VStack>

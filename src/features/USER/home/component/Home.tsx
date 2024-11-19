@@ -13,15 +13,15 @@ export default function Home(): React.ReactNode {
 
   useEffect(() => {
     (async () => {
-      const response = await dispatch(GetProductAsync("get")).unwrap();
+      const response = await dispatch(GetProductAsync()).unwrap();
       setProducts(response);
     })();
   }, []);
 
   return (
-    <VStack p={"50px"} mt={"30px"} height={"100%"}>
+    <VStack p={"50px 10px"} mt={"30px"} height={"100%"}>
       <ModalDetailProduct isOpen={isOpen} onClose={onClose}></ModalDetailProduct>
-      <Flex color={"brand.active"} width={"100%"} mb={"10px"}>
+      <Flex color={"brand.active"} width={"100%"} mb={"10px"} ps={"100px"}>
         <b>Product</b>
       </Flex>
       <HStack width={"100%"} rowGap={"40px"} columnGap={"20px"} wrap={"wrap"} height={"100%"} overflow={"auto"} display={"flex"} justifyContent={"center"} paddingBottom={"100px"}>

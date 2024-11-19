@@ -1,3 +1,5 @@
+import { ProductDTO } from "./product-DTO";
+
 export interface LoginResponseDTO {
   succes: boolean;
   author: string;
@@ -12,6 +14,10 @@ export interface LoginResponseDTO {
       id: number;
       email: string;
       role: "USER";
+      cart: ProductDTO[];
+      _count: {
+        cart: number;
+      };
     };
   };
 }

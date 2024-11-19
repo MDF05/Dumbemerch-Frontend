@@ -12,7 +12,7 @@ const BrandConfig: ThemeOverride = {
       borderColorInvalid: "red",
       succes: "#56C05A",
       warning: "#FFB000",
-      danger: "#F74D4D",
+      danger: "red",
     },
   },
 };

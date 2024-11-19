@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Avatar, Button, Menu, MenuButton, MenuList, MenuItem, MenuDivider, useColorModeValue, Stack, Center, Image, Grid } from "@chakra-ui/react";
+import { Box, Flex, Avatar, Button, Menu, MenuButton, MenuList, MenuItem, MenuDivider, useColorModeValue, Stack, Center, Image, Grid, Input } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
@@ -16,11 +16,15 @@ export default function AdminBaseLayout() {
     <Grid>
       <Box bg={useColorModeValue("gray.300", "gray.900")} px={4} zIndex={10000} position={"fixed"} width={"100%"}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Box>
+          <Box width={"5%"}>
             <Image src={dumbmerchLogo} width={"50px"} dropShadow={"5px 5px 5px black"}></Image>
           </Box>
 
-          <Flex alignItems={"center"}>
+          <Box width={"40%"}>
+            <Input width={"100%"} placeholder="search ....."></Input>
+          </Box>
+
+          <Flex alignItems={"center"} w={"50%"}>
             <Stack direction={"row"} spacing={7}>
               <NavLink to="/" color={pathname == "/admin" ? "brand.active" : "brand.baseColor"}>
                 Home

@@ -3,7 +3,6 @@ import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 import noImage from "../../../../assets/image/no-image-gallery.png";
 import { IoMdArrowBack } from "react-icons/io";
-import { FaCartPlus } from "react-icons/fa";
 
 interface ModalDetailProduct {
   isOpen: boolean;
@@ -16,10 +15,23 @@ import { ProductSchema } from "../../../../schemas/product-schema";
 import { ImageDTO } from "../../../../DTO/image-DTO";
 import ButtonAddCart from "./Button-Add-Cart";
 import { ProductDTO } from "../../../../DTO/product-DTO";
+import ButtonCheckout from "./Button-Checkout";
+import { useAppDispatch } from "../../../../stores/stores";
+import { getProfileByIdUserLogin } from "../../../../stores/profile/async-profile";
+import { useEffect } from "react";
 
 export default function ModalDetailProduct({ isOpen, onClose }: ModalDetailProduct) {
   const { state } = useLocation();
   const { product }: { product: ProductDTO } = state ?? ({} as ProductSchema);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    (async () => {
+      let res = await dispatch(getProfileByIdUserLogin());
+    })();
+  }, []);
+
+  if (!product) onClose();
 
   return (
     <>
@@ -52,9 +64,10 @@ export default function ModalDetailProduct({ isOpen, onClose }: ModalDetailProdu
             >
               <Flex>
                 <Box as={AwesomeSlider} width={"100%"} height={"400px"}>
-                  {product?.images?.map((image: ImageDTO, index: number) => {
-                    return <Image data-src={image.imageUrl ?? noImage} width={"100%"} key={index}></Image>;
-                  })}
+                  {product?.images?.length != 0 &&
+                    product?.images?.map((image: ImageDTO, index: number) => {
+                      return <Image data-src={image?.imageUrl ?? noImage} width={"100%"} key={index}></Image>;
+                    })}
                 </Box>
               </Flex>
               <VStack alignItems={"start"} textAlign={"justify"}>
@@ -84,10 +97,8 @@ export default function ModalDetailProduct({ isOpen, onClose }: ModalDetailProdu
                 <Text color={"brand.active"} textAlign={"end"} width={"100%"} my={"20px"}>
                   <b>Rp.{parseInt(product?.price).toLocaleString("ID-id")}</b>
                 </Text>
-                <Button bg={"brand.active"} width={"100%"}>
-                  buy
-                </Button>
-                <ButtonAddCart id={`${product?.id}`} />
+                <ButtonCheckout></ButtonCheckout>
+                <ButtonAddCart productId={`${product?.id}`} w={"100%"} bg={"brand.active"} />
               </VStack>
             </Grid>
           </Flex>
