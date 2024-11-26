@@ -32,14 +32,14 @@ export default function AppRouter() {
         { path: "/profile/:name", element: <Profile></Profile> },
       ],
     },
-    {
-      path: "/",
-      element: <BaseAuthLayout />,
-      children: [
-        { path: "/login", element: <Login /> },
-        { path: "/register", element: <Register /> },
-      ],
-    },
+    // {
+    //   path: "/",
+    //   element: <BaseAuthLayout />,
+    //   children: [
+    //     { path: "/login", element: <Login /> },
+    //     { path: "/register", element: <Register /> },
+    //   ],
+    // },
   ]);
 
   return <RouterProvider router={router} />;
