@@ -24,20 +24,20 @@ export default function AppRouter() {
       ],
     },
     {
-      path: "/auth",
-      element: <BaseAuthLayout />,
-      children: [
-        { path: "/auth/login", element: <Login /> },
-        { path: "/auth/register", element: <Register /> },
-      ],
-    },
-    {
       path: "/",
       element: <BaseLayout></BaseLayout>,
       children: [
         { path: "/", element: <Home></Home> },
         { path: "/complain", element: <ChatComponent></ChatComponent> },
         { path: "/profile/:name", element: <Profile></Profile> },
+      ],
+    },
+    {
+      path: "/",
+      element: <BaseAuthLayout />,
+      children: [
+        { path: "/login", element: <Login /> },
+        { path: "/register", element: <Register /> },
       ],
     },
   ]);

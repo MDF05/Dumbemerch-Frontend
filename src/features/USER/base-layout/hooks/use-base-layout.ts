@@ -22,12 +22,12 @@ export default function useBaseLayout(): useBaseLayoutProps {
   const token = localStorage.getItem("token");
   useEffect(() => {
     (async () => {
-      if (!token) navigate("/auth/login");
+      if (!token) navigate("/login");
       else {
         const info: CheckTokenDTO = await dispatch(checkAuth("check")).unwrap();
         await dispatch(GetCartAsync()).unwrap();
         await dispatch(GetProductAsync({})).unwrap();
-        if (info.token == "invalid") navigate("/auth/login");
+        if (info.token == "invalid") navigate("/login");
       }
     })();
   }, [token,navigate,dispatch]);
