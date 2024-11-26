@@ -22,7 +22,15 @@ export default function AppRouter() {
         { path: "/admin/category", element: <AdminCategory></AdminCategory> },
       ],
     },
-   
+    // {
+    //   path: "/",
+    //   element: <BaseLayout></BaseLayout>,
+    //   children: [
+    //     { path: "/", element: <Home></Home> },
+    //     { path: "/complain", element: <ChatComponent></ChatComponent> },
+    //     { path: "/profile/:name", element: <Profile></Profile> },
+    //   ],
+    // },
     {
       path: "/",
       element: <BaseAuthLayout />,
