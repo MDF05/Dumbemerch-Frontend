@@ -1,15 +1,14 @@
 import { Box, Flex, Grid, HStack, Image, Text, VStack } from "@chakra-ui/react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, Navigate } from "react-router-dom";
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
 import { ToastContainer } from "react-toastify";
 import ChakraLinkExtendReactRouterLink from "./../../../../components/Chakra-LInk-Extend-React-Router-Link";
 
-export default function BaseAuthLayout() {
+export default function BaseAuthLayout():React.ReactNode {
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
 
-  const navigate = useNavigate()
-  return  (navigate("/asu"))
+  return  <Navigate to={"/asu"}></Navigate>
 
   return (
     <Grid bg={"brand.background"} height={"100vh"} width={"100%"} color={"brand.color"} gridTemplateColumns={"60% 40%"} alignItems={"center"} paddingX={"150px"}>
