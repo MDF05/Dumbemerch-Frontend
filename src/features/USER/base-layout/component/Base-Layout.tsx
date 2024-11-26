@@ -13,16 +13,17 @@ import MenuListDropdown from "../../../ADMIN/base-layout/component/MenuList-Drop
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../../stores/stores";
 import { GetProductAsync } from "../../../../stores/product/async-product";
+import { SearchSchema } from "../../../../schemas/search-schema";
 
 export default function BaseLayout() {
   const { colorMode, toggleColorMode, pathname, user } = useBaseLayout();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<SearchSchema>();
   const dispatch = useAppDispatch();
 
-  async function onSubmitSearch(event: any) {
+  async function onSubmitSearch(event : SearchSchema) {
     await dispatch(GetProductAsync({ query: event.searchQuery }));
-  }
+  } 
 
   return (
     <Grid>

@@ -13,6 +13,7 @@ import AdminCategory from "./../features/ADMIN/category/component/Admin-Category
 
 export default function AppRouter() {
   const router = createBrowserRouter([
+
     {
       path: "/admin",
       element: <AdminBaseLayout></AdminBaseLayout>,
@@ -23,11 +24,11 @@ export default function AppRouter() {
       ],
     },
     {
-      path: "/",
+      path: "/auth",
       element: <BaseAuthLayout />,
       children: [
-        { path: "/login", element: <Login /> },
-        { path: "/register", element: <Register /> },
+        { path: "/auth/login", element: <Login /> },
+        { path: "/auth/register", element: <Register /> },
       ],
     },
     {

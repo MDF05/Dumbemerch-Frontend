@@ -25,8 +25,8 @@ export default function BaseAuthLayout():React.ReactNode {
         </Flex>
         <HStack mt={"40px"} width={"100%"} gap={"20px"}>
           <ChakraLinkExtendReactRouterLink
-            to="/login"
-            background={pathname == "login" ? "brand.active" : "transparent"}
+            to="/auth/login"
+            background={pathname == "auth/login" ? "brand.active" : "transparent"}
             color={"brand.baseColor"}
             width={"120px"}
             height={"40px"}
@@ -35,8 +35,8 @@ export default function BaseAuthLayout():React.ReactNode {
             Login
           </ChakraLinkExtendReactRouterLink>
           <ChakraLinkExtendReactRouterLink
-            to="/register"
-            background={pathname == "register" ? "brand.active" : "transparent"}
+            to="/auth/register"
+            background={pathname == "auth/register" ? "brand.active" : "transparent"}
             color={"brand.baseColor"}
             width={"120px"}
             height={"40px"}

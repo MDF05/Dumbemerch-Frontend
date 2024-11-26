@@ -10,7 +10,7 @@ export default function ButtonLogout(): React.ReactNode {
   function LogOut() {
     alert("Logged out,please login again");
     dispatch(LOGOUT());
-    navigate("/login");
+    navigate("/auth/login");
   }
 
   return (
