@@ -30,7 +30,7 @@ export default function useBaseLayout(): useBaseLayoutProps {
         if (info.token == "invalid") navigate("/login");
       }
     })();
-  }, []);
+  }, [token,navigate,dispatch]);
 
   return { colorMode, toggleColorMode, pathname, user: state.user as UserDTO };
 }
