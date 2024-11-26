@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, HStack, Image, Text, VStack } from "@chakra-ui/react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation} from "react-router-dom";
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
 import { ToastContainer } from "react-toastify";
 import ChakraLinkExtendReactRouterLink from "./../../../../components/Chakra-LInk-Extend-React-Router-Link";
@@ -7,6 +7,11 @@ import ChakraLinkExtendReactRouterLink from "./../../../../components/Chakra-LIn
 export default function BaseAuthLayout():React.ReactNode {
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
+
+
+
+  if(localStorage.getItem("token")) return <Navigate to="/" ></Navigate>
+  else return <Outlet></Outlet>
 
 
   return (
