@@ -12,7 +12,7 @@ export default function BaseAuthLayout():React.ReactNode {
 
   if(localStorage.getItem("token")) return <Navigate to="/" ></Navigate>
 
-  else  return (
+   return (
     <Grid bg={"brand.background"} height={"100vh"} width={"100%"} color={"brand.color"} gridTemplateColumns={"60% 40%"} alignItems={"center"} paddingX={"150px"}>
       <VStack gap={"10px"}>
         <Flex width={"100%"}>
