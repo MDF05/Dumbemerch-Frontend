@@ -6,10 +6,10 @@ import { useEffect } from "react";
 import { UserDTO } from "./../../../../DTO/user.DTO";
 import { AuthState } from "./../../../../stores/auth/slice";
 import { useAppDispatch, useAppSelector } from "./../../../../stores/stores";
-// import { checkAuth } from "./../../../../stores/auth/async";
-// import { CheckTokenDTO } from "./../../../../DTO/check-token-DTO";
-// import { GetCartAsync } from "../../../../stores/cart/async-cart";
-// import { GetProductAsync } from "../../../../stores/product/async-product";
+import { checkAuth } from "./../../../../stores/auth/async";
+import { CheckTokenDTO } from "./../../../../DTO/check-token-DTO";
+import { GetCartAsync } from "../../../../stores/cart/async-cart";
+import { GetProductAsync } from "../../../../stores/product/async-product";
 
 export default function useBaseLayout(): useBaseLayoutProps {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -22,13 +22,13 @@ export default function useBaseLayout(): useBaseLayoutProps {
   const token = localStorage.getItem("token");
   useEffect(() => {
     (async () => {
-      // if (!token) navigate("/login");
-      // else {
-      //   const info: CheckTokenDTO = await dispatch(checkAuth("check")).unwrap();
-      //   await dispatch(GetCartAsync()).unwrap();
-      //   await dispatch(GetProductAsync({})).unwrap();
-      //   if (info.token == "invalid") navigate("/login");
-      // }
+      if (!token) return navigate("/login");
+      else {
+        const info: CheckTokenDTO = await dispatch(checkAuth("check")).unwrap();
+        await dispatch(GetCartAsync()).unwrap();
+        await dispatch(GetProductAsync({})).unwrap();
+        if (info.token == "invalid")return navigate("/login");
+      }
     })();
   }, [token,navigate,dispatch]);
 
