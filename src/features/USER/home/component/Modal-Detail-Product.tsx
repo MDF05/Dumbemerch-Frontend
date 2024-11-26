@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, Icon, Image, List, ListIcon, ListItem, Modal, ModalContent, ModalOverlay, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, Image, Modal, ModalContent, ModalOverlay, Text, VStack } from "@chakra-ui/react";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
 import noImage from "../../../../assets/image/no-image-gallery.png";
@@ -15,21 +15,11 @@ import { ProductSchema } from "../../../../schemas/product-schema";
 import { ImageDTO } from "../../../../DTO/image-DTO";
 import ButtonAddCart from "./Button-Add-Cart";
 import { ProductDTO } from "../../../../DTO/product-DTO";
-import ButtonCheckout from "./Button-Checkout";
-import { useAppDispatch } from "../../../../stores/stores";
-import { getProfileByIdUserLogin } from "../../../../stores/profile/async-profile";
-import { useEffect } from "react";
+import ButtonMultipleCheckout from "./Button-Multiple-Checkout";
 
 export default function ModalDetailProduct({ isOpen, onClose }: ModalDetailProduct) {
   const { state } = useLocation();
   const { product }: { product: ProductDTO } = state ?? ({} as ProductSchema);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    (async () => {
-      let res = await dispatch(getProfileByIdUserLogin());
-    })();
-  }, []);
 
   if (!product) onClose();
 
@@ -71,7 +61,7 @@ export default function ModalDetailProduct({ isOpen, onClose }: ModalDetailProdu
                 </Box>
               </Flex>
               <VStack alignItems={"start"} textAlign={"justify"}>
-                <Text color={"brand.active"} fontSize={"2rem"}>
+                <Text color={"brand.active"} fontSize={"2rem"} textAlign={"left"}>
                   {product?.name}
                 </Text>
                 <Text>Stock : {product?.quantity}</Text>
@@ -97,7 +87,8 @@ export default function ModalDetailProduct({ isOpen, onClose }: ModalDetailProdu
                 <Text color={"brand.active"} textAlign={"end"} width={"100%"} my={"20px"}>
                   <b>Rp.{parseInt(product?.price).toLocaleString("ID-id")}</b>
                 </Text>
-                <ButtonCheckout></ButtonCheckout>
+
+                <ButtonMultipleCheckout Product={[{ countItem: 1, product: product }]}></ButtonMultipleCheckout>
                 <ButtonAddCart productId={`${product?.id}`} w={"100%"} bg={"brand.active"} />
               </VStack>
             </Grid>

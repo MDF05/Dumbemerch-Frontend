@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { responseDTO } from "./../../DTO/response-DTO";
-import { cartDTO, postCartDTO } from "./../../DTO/cart-DTO";
+import { CartDTO, PostCartDTO } from "./../../DTO/cart-DTO";
 import { apiV1 } from "../../lib/api-v1";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
 
-export const GetCartAsync = createAsyncThunk<responseDTO<cartDTO>, void>("/get/cart", async (data, thunkAPI) => {
+export const GetCartAsync = createAsyncThunk<responseDTO<CartDTO>, void>("/get/cart", async (_, thunkAPI) => {
   try {
     const res = await apiV1.get(`/cart`);
     return res.data;
@@ -17,7 +17,7 @@ export const GetCartAsync = createAsyncThunk<responseDTO<cartDTO>, void>("/get/c
   }
 });
 
-export const PostCartAsync = createAsyncThunk<responseDTO<postCartDTO>, { productId: string }>("/get/post", async (data, thunkAPI) => {
+export const PostCartAsync = createAsyncThunk<responseDTO<PostCartDTO>, { productId: string }>("/get/post", async (data, thunkAPI) => {
   try {
     const res = await apiV1.post(`/cart/${data.productId}`);
     return res.data;

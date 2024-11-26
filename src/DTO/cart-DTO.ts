@@ -1,7 +1,7 @@
 import { ProductDTO } from "./product-DTO";
 
 export interface Cart {
-  countItem?: number;
+  countItem: number;
   product: ProductDTO;
 }
 

@@ -16,9 +16,9 @@ export default function ButtonAddCart(props: ButtonAddCartProps): React.ReactNod
 
   async function onAddCart() {
     try {
-      const res = await dispatch(PostCartAsync({ productId })).unwrap();
+       await dispatch(PostCartAsync({ productId })).unwrap();
       alert("successfully added to cart");
-    } catch (err) {}
+    } catch(err) { return err}
   }
 
   return (

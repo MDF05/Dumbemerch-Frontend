@@ -62,6 +62,15 @@ const ChatComponent = () => {
     }
   }, [senderId, receiverId, auth?.user?.role]);
 
+  // const divRef = useRef();
+
+  // const scrollToElement = () => {
+  //   const { current } = divRef;
+  //   if (current !== null) {
+  //     current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
+
   const handleSendMessage = (data: { message: string }) => {
     const roomId: string = auth.user?.role === "USER" ? `${receiverId}${senderId}` : `${senderId}${receiverId}`;
     const message = { message: data.message, roomId, senderId, receiverId };
@@ -70,12 +79,12 @@ const ChatComponent = () => {
   };
 
   return (
-    <Grid height={"100vh"} gridTemplateColumns={"30% 70%"} overflow={"hidden"}>
-      <VStack height={"100%"} borderRight={"1px solid"} borderColor={"brand.darkColor"} pt={"70px"} overflowY={"scroll"}>
+    <Grid height={"100vh"} gridTemplateColumns={"30% 70%"}>
+      <VStack height={"100%"} borderRight={"1px solid"} borderColor={"brand.darkColor"} pt={"70px"}>
         <ListChat listChat={auth?.user?.role === "USER" ? listAdmin : roomAdmin} handleroom={setReceiverId} cursor={"pointer"}></ListChat>
       </VStack>
-      <VStack height={"100%"} padding={"20px"} position={"relative"} width={"100%"} overflow={"hidden"}>
-        <VStack height={"90%"} width={"100%"} justifyContent={"start"} gap={"20px"} overflowY={"scroll"} overflowX={"hidden"} pt={"50px"}>
+      <VStack height={"100%"} padding={"20px"} position={"relative"} width={"100%"} overflow={"hidden"} display={"flex"} justifyContent={"end"}>
+        <VStack width={"100%"} justifyContent={"start"} gap={"20px"} overflowY={"scroll"} overflowX={"hidden"} pt={"50px"}>
           {chats.map((data, key) => {
             return data.senderId == auth.user?.id ? (
               <BoxChatUserLogin justifyContent="end" key={key}>

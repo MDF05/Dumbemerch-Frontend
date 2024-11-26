@@ -6,7 +6,8 @@ import profileReducer from "./profile/slice.-profile";
 import productReducer from "./product/slice-product";
 import categoryReducer from "./category/slice-category";
 import cartReducer from "./cart/slice-cart";
-import checkoutReducer from "./checkout/slice-checkout";
+import paymentReducer from "./payment/slice-payment";
+import transactionReducer from "./transaction/slice-transaction";
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     products: productReducer,
     categorys: categoryReducer,
     cart: cartReducer,
-    checkout: checkoutReducer,
+    checkout: paymentReducer,
+    transaction: transactionReducer,
   },
 });
 

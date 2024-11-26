@@ -8,6 +8,7 @@ import { LoginSchema } from "../../../../../schemas/login-schema";
 import { LoginResponseDTO } from "../../../../../DTO/login-response-DTO";
 import { loginAsync } from "../../../../../stores/auth/async";
 import { setCart } from "../../../../../stores/cart/slice-cart";
+import { GetProductAsync } from "../../../../../stores/product/async-product";
 
 export default function useLogin(): UseLoginTypes {
   const dispatch: ThunkDispatch<{ auth: AuthState }, undefined, UnknownAction> & Dispatch<UnknownAction> = useAppDispatch();
@@ -17,7 +18,8 @@ export default function useLogin(): UseLoginTypes {
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     const res: LoginResponseDTO = await dispatch(loginAsync(data)).unwrap();
-    dispatch(setCart({ countCartUser: res.content.user._count.cart, products: res.content.user.cart, loading: false }));
+    dispatch(setCart({ countCartUser: res.content.user._count.cart, carts: [], loading: false }));
+    dispatch(GetProductAsync({}));
 
     if (res.status)
       setTimeout(() => {

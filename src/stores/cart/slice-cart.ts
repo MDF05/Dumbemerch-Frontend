@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ProductDTO } from "../../DTO/product-DTO";
 import { GetCartAsync, PostCartAsync } from "./async-cart";
-import products from "./../../dummy/product";
-import { cart } from "../../DTO/cart-DTO";
+import { Cart } from "../../DTO/cart-DTO";
 
 export interface initialStateCart {
   countCartUser: number;
-  carts: cart[];
+  carts: Cart[];
   loading: boolean;
 }
 

@@ -17,9 +17,9 @@ export const PostProductAsync = createAsyncThunk<ProductResponseDTO, ProductSche
   }
 });
 
-export const GetProductAsync = createAsyncThunk<ProductResponseDTO, void>("/product/get", async (data, thunkAPI) => {
+export const GetProductAsync = createAsyncThunk<ProductResponseDTO, { query?: string }>("/product/get", async (data, thunkAPI) => {
   try {
-    const res = await apiV1.get("/product");
+    const res = await apiV1.get(`/products?search=${data.query ? data.query : ""}`);
     return thunkAPI.fulfillWithValue(res.data);
   } catch (error: unknown) {
     if (isAxiosError(error)) {

@@ -14,6 +14,7 @@ export interface ProfileResponseDTO {
       address: string | null;
       gender: string | null;
       phone: string | null;
+      image?: string | null;
       Transaction: [];
       user?: {
         email: string;

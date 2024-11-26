@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PostMidtransPayment } from "./async-checkout";
+import { PostMidtransPayment } from "./async-payment";
 
-export interface initialStateCheckout {
+export interface initialPaymentState {
   loading: boolean;
   token: string;
 }
 
-const initialState: initialStateCheckout = {
+const initialState: initialPaymentState = {
   loading: false,
   token: "",
 };
 
-const checkoutSlice = createSlice({
+const paymentSlice = createSlice({
   name: "checkout",
   initialState,
   reducers: {},
@@ -23,4 +23,4 @@ const checkoutSlice = createSlice({
   },
 });
 
-export default checkoutSlice.reducer;
+export default paymentSlice.reducer;

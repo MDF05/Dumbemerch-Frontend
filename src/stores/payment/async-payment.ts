@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
 import { apiV1 } from "../../lib/api-v1";
 
-export const PostMidtransPayment = createAsyncThunk<responseDTO<{ token: string }>, CheckOutSchema>("/payment/midtrans", async (data, thunkAPI) => {
+export const PostMidtransPayment = createAsyncThunk<responseDTO<{ token: string }>, CheckOutSchema>("/transaction/midtrans", async (data, thunkAPI) => {
   try {
     const res = await apiV1.post(`/payment`, data);
     return res.data;

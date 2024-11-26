@@ -7,7 +7,7 @@ export default function AdminProduct(): React.ReactNode {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const dispatch = useAppDispatch();
 
-  dispatch(GetProductAsync());
+  dispatch(GetProductAsync({}));
 
   return (
     <Grid gridTemplateColumns={"100%"} padding={"100px 50px"}>

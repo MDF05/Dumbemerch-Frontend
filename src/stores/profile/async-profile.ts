@@ -3,9 +3,8 @@ import { AxiosResponse, isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { apiV1 } from "../../lib/api-v1";
 import { ProfileResponseDTO } from "../../DTO/profile-DTO";
-import { EditProfileSchema } from "./../../schemas/edit-profile-schema";
 
-export const getProfileByIdUserLogin = createAsyncThunk<Omit<ProfileResponseDTO, "transaction">, void>("profile/create", async (data, thunkAPI) => {
+export const getProfileByIdUserLogin = createAsyncThunk<Omit<ProfileResponseDTO, "transaction">, void>("profile/create", async (_, thunkAPI) => {
   try {
     const res = await apiV1.get("/profile");
 
@@ -31,9 +30,9 @@ export const getProfileById = createAsyncThunk<ProfileResponseDTO, { profileId: 
   }
 });
 
-export const putProfileUpdate = createAsyncThunk<ProfileResponseDTO, { profile: EditProfileSchema; profileId: number }>("profile/putProfile", async (data, thunkAPI) => {
+export const putProfileUpdate = createAsyncThunk<ProfileResponseDTO, { profile: FormData; profileId: number }>("profile/putProfile", async (data, thunkAPI) => {
   try {
-    const res: AxiosResponse<ProfileResponseDTO> = await apiV1.put(`/profile/${data.profileId}`, data.profile);
+    const res: AxiosResponse<ProfileResponseDTO> = await apiV1.put(`/profile/${data.profileId}`, data.profile, { headers: { "Content-Type": "multipart/form-data" } });
 
     return thunkAPI.fulfillWithValue(res.data);
   } catch (error: unknown) {

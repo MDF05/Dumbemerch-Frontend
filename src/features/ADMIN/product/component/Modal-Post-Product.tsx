@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalContent, ModalOverlay, Select, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalContent, ModalOverlay, Select, Text, Textarea, VStack, useDisclosure } from "@chakra-ui/react";
 import { IoMdArrowBack } from "react-icons/io";
 
 import { Tooltip } from "react-tooltip";
@@ -7,36 +7,49 @@ import { productSchema, ProductSchema } from "../../../../schemas/product-schema
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
 import { PostProductAsync } from "../../../../stores/product/async-product";
-import { ProductDTO, ProductResponseDTO } from "../../../../DTO/product-DTO";
 import { ComponentModalPops } from "../../../../types/Component-Modal-Types";
+import { useEffect, useState } from "react";
+import ModalDetailImage from "./../../../../components/Modal-Detail-Image";
+import ChakraLinkExtendReactRouterLink from "../../../../components/Chakra-LInk-Extend-React-Router-Link";
 
 export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops) {
   const {
     register,
     reset,
     handleSubmit,
-    formState: { errors },
+    watch,
   } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) });
 
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.categorys);
+  const watchImages:Blob[] = watch("images");
+  const [listImageURL, setListImageURL] = useState<string[]>([]);
+  const { isOpen: isOpenModalImage, onClose: closeModalImage, onOpen: openModalImage } = useDisclosure();
+
+  useEffect(() => {
+    if (watchImages) {
+      console.log(watchImages);
+      const urls = Array.from(watchImages).map((file : Blob) => URL.createObjectURL(file));
+      setListImageURL(urls);
+    }
+  }, [watchImages]);
 
   async function onSubmitProduct(event: ProductSchema) {
     try {
       const formData = new FormData();
-      formData.append("name", event.name);
+      formData.append("name", event.name.toLocaleLowerCase());
       formData.append("category", `${event.category}`);
       formData.append("price", event.price);
       formData.append("quantity", event.quantity);
-      formData.append("description", event.description);
+      formData.append("description", event.description.toLocaleLowerCase());
 
       if (event.images.length !== 0) {
-        for (let i of event.images) {
+        for (const i of event.images) {
           formData.append("image", i);
         }
       }
 
-      const res: ProductResponseDTO = await dispatch(PostProductAsync(formData)).unwrap();
+      await dispatch(PostProductAsync(formData)).unwrap();
       reset();
     } catch (err) {}
   }
@@ -81,9 +94,14 @@ export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops
                   <Box bg={"brand.active"} width={"max-content"} padding={"10px"} borderRadius={"5px"}>
                     Upload Image
                   </Box>
-                  <Text as="a" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrFRkIBHWK24Vjrw7a8q7NAsy8p8uZKKHEZQ&s">
-                    Mouse.jpg
-                  </Text>
+                  <ModalDetailImage isOpen={isOpenModalImage} onClose={closeModalImage}></ModalDetailImage>
+                  {listImageURL.map((url, index) => {
+                    return (
+                      <ChakraLinkExtendReactRouterLink to="" state={{ imageURL: url }} onClick={openModalImage}>
+                        image {index + 1},
+                      </ChakraLinkExtendReactRouterLink>
+                    );
+                  })}
                 </FormLabel>
                 <Input type="file" hidden {...register("images")} multiple={true} />
               </FormControl>
@@ -132,7 +150,7 @@ export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops
                   borderColor={"brand.baseColor"}
                   {...register("category")}
                 >
-                  {state.categorys.map((category) => (
+                  {state?.categorys?.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>

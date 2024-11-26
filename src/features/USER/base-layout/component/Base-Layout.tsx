@@ -1,37 +1,28 @@
 "use client";
 
-import {
-  Box,
-  Flex,
-  Avatar,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  useColorModeValue,
-  Stack,
-  Center,
-  Image,
-  Grid,
-  useDisclosure,
-  Input,
-} from "@chakra-ui/react";
+import { Box, Flex, Button, useColorModeValue, Stack, Image, Grid, useDisclosure, Input } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
 import NavLink from "./Nav-Link";
 import { Outlet } from "react-router-dom";
 import useBaseLayout from "../hooks/use-base-layout";
-import ChakraLinkExtendReactRouterLink from "../../../../components/Chakra-LInk-Extend-React-Router-Link";
 import CartModal from "../../cart/component/Modal-Cart";
-import ButtonLogout from "./../../../ADMIN/base-layout/component/Button-Logout";
 import IconBadgeCart from "./../../cart/component/Icon-Badge-Cart";
+import MenuListDropdown from "../../../ADMIN/base-layout/component/MenuList-Dropdown";
+import { useForm } from "react-hook-form";
+import { useAppDispatch } from "../../../../stores/stores";
+import { GetProductAsync } from "../../../../stores/product/async-product";
 
 export default function BaseLayout() {
   const { colorMode, toggleColorMode, pathname, user } = useBaseLayout();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { register, handleSubmit } = useForm();
+  const dispatch = useAppDispatch();
+
+  async function onSubmitSearch(event: any) {
+    await dispatch(GetProductAsync({ query: event.searchQuery }));
+  }
 
   return (
     <Grid>
@@ -42,8 +33,9 @@ export default function BaseLayout() {
             <Image src={dumbmerchLogo} width={"50px"} dropShadow={"5px 5px 5px black"}></Image>
           </Box>
 
-          <Box width={user?.role === "ADMIN" ? "30%" : "50%"}>
-            <Input width={"100%"} placeholder="search ....."></Input>
+          <Box width={user?.role === "ADMIN" ? "30%" : "50%"} as={"form"} onSubmit={handleSubmit((event) => onSubmitSearch(event))}>
+            <Input width={"100%"} placeholder="search ....." {...register("searchQuery")}></Input>
+            <Button type={`submit`} hidden></Button>
           </Box>
 
           <Flex alignItems={"center"} width={user?.role === "ADMIN" ? "60%" : "40%"} justifyContent={"end"}>
@@ -75,31 +67,7 @@ export default function BaseLayout() {
               </NavLink>
               <Button onClick={toggleColorMode}>{colorMode === "light" ? <MoonIcon /> : <SunIcon />}</Button>
 
-              <Menu>
-                <MenuButton as={Button} rounded={"full"} variant={"link"} cursor={"pointer"} minW={0}>
-                  <Avatar size={"sm"} src={"https://avatars.dicebear.com/api/male/username.svg"} />
-                </MenuButton>
-                <MenuList alignItems={"center"}>
-                  <br />
-                  <Center>
-                    <Avatar size={"2xl"} src={"https://avatars.dicebear.com/api/male/username.svg"} />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem>
-                    <ChakraLinkExtendReactRouterLink to="/profile/me" width={"100%"} display={"flex"} justifyContent={"start"}>
-                      My Profile
-                    </ChakraLinkExtendReactRouterLink>
-                  </MenuItem>
-                  <MenuItem>
-                    <ButtonLogout></ButtonLogout>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+              <MenuListDropdown></MenuListDropdown>
             </Stack>
           </Flex>
         </Flex>

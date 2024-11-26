@@ -10,7 +10,7 @@ export default function ButtonDeleteCategory({ id }: { id: number | undefined })
   function onDeleteCategory() {
     {
       const confirmDelete = confirm("Are you sure you want to delete this data");
-      const res = id && confirmDelete && dispatch(DeleteCategoryAsync({ id }));
+       id && confirmDelete && dispatch(DeleteCategoryAsync({ id }));
     }
   }
   return (

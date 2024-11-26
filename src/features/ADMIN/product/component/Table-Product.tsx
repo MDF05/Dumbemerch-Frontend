@@ -29,7 +29,7 @@ export default function TableProduct(): React.ReactNode {
           </Tr>
         </Thead>
         <Tbody>
-          {state?.products?.content.map((product, key) => {
+          {state?.products?.content?.map((product, key) => {
             return (
               <Tr borderBottom={"1.5px solid"} borderColor={"brand.baseColor"} key={key}>
                 <Td>{key + 1}</Td>

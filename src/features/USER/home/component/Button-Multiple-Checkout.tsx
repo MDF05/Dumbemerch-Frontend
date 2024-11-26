@@ -1,12 +1,12 @@
 import { Box, Button } from "@chakra-ui/react";
-import { ProductDTO } from "../../../../DTO/product-DTO";
-import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { CheckOutSchema, checkoutSchema } from "../../../../schemas/checkout-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
-import { PostMidtransPayment } from "../../../../stores/checkout/async-checkout";
+import { PostMidtransPayment } from "../../../../stores/payment/async-payment";
 import { Cart } from "../../../../DTO/cart-DTO";
+import { PostTransaction } from "../../../../stores/transaction/async-transaction";
+import { TransactionDTO } from "../../../../DTO/transaction-DTO";
 
 declare global {
   interface Window {
@@ -23,10 +23,9 @@ export default function ButtonMultipleCheckout({ Product }: ButtonCheckoutProps)
   const auth = useAppSelector((state) => state.auth);
   const user = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
-  const totalPrice = Product.reduce((a, b) => a + (b?.countItem || 1) * +b?.product?.price, 0);
-  console.log(totalPrice);
 
-  if (Product) {
+  if (Product.length !== 0) {
+    const totalPrice = Product.reduce((a, b) => a + b.countItem * +b?.product?.price, 0);
     setValue("totalPrice", totalPrice);
     setValue("userDetail.email", `${auth.user?.email}`);
     setValue("userDetail.id", auth.user?.id ?? 0);
@@ -56,7 +55,26 @@ export default function ButtonMultipleCheckout({ Product }: ButtonCheckoutProps)
       if (data.succes)
         window.snap.pay(`${data.content.token}`, {
           onSuccess: (res: any) => {
-            console.log("Success", res);
+            const { fraud_status, gross_amount, order_id, payment_type, status_code, status_message, transaction_id, transaction_status, transaction_time } = res;
+
+            const dataTransaction: TransactionDTO[] = Product.map((data) => {
+              return {
+                fraud_status,
+                gross_amount,
+                order_id,
+                payment_type,
+                status_code,
+                status_message,
+                transaction_id,
+                transaction_status,
+                transaction_time,
+                countItem: data.countItem,
+                productId: data.product.id,
+                profileId: user.profile.content.profile.id,
+              };
+            });
+
+            dispatch(PostTransaction(dataTransaction));
           },
           // onPending: (res: any) => {
           //   console.log("Pending", res);

@@ -6,6 +6,7 @@ export const editProfileSchema = z.object({
   phone: z.string({ message: "must be number" }),
   gender: z.string({ message: "must be string)" }),
   address: z.string({ message: "must be string" }).min(10, "must be at least 10 characters"),
+  image: z.any().optional(),
 });
 
 export type EditProfileSchema = z.infer<typeof editProfileSchema>;

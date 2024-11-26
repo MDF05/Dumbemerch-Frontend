@@ -7,7 +7,6 @@ import { productSchema, ProductSchema } from "../../../../schemas/product-schema
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
 import { PutProductAsync } from "../../../../stores/product/async-product";
-import { ProductResponseDTO } from "../../../../DTO/product-DTO";
 import { ComponentModalPops } from "../../../../types/Component-Modal-Types";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
@@ -15,9 +14,7 @@ import { useEffect } from "react";
 export default function ModalEditProduct({ isOpen, onClose }: ComponentModalPops) {
   const {
     register,
-    reset,
     handleSubmit,
-    formState: { errors },
     setValue,
   } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) });
 
@@ -43,13 +40,13 @@ export default function ModalEditProduct({ isOpen, onClose }: ComponentModalPops
       formData.append("quantity", event.quantity);
       formData.append("description", event.description);
       if (event.images.length !== 0) {
-        for (let i of event.images) {
+        for (const i of event.images) {
           formData.append("image", i);
         }
       }
 
-      const res: ProductResponseDTO = await dispatch(PutProductAsync({ formData, productId: stateProduct.product.id })).unwrap();
-    } catch (err) {}
+        await dispatch(PutProductAsync({ formData, productId: stateProduct.product.id })).unwrap();
+    } catch (err) { return err}
   }
 
   return (

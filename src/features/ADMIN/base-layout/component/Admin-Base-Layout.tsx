@@ -26,7 +26,7 @@ export default function AdminBaseLayout() {
 
           <Flex alignItems={"center"} w={"50%"}>
             <Stack direction={"row"} spacing={7}>
-              <NavLink to="/" color={pathname == "/admin" ? "brand.active" : "brand.baseColor"}>
+              <NavLink to="/admin" color={pathname == "/admin" ? "brand.active" : "brand.baseColor"}>
                 Home
               </NavLink>
 

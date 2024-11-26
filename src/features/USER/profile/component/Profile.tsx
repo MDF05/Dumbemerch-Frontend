@@ -1,5 +1,5 @@
 import { Button, Grid, HStack, Image, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import profileImage from "../../../../assets/image/profile.png";
+import noImage from "../../../../assets/image/no-image-gallery.png";
 import { useEffect, useState } from "react";
 import ModalEditProfile from "./Modal-Edit-Profile";
 import { ProfileResponseDTO } from "./../../../../DTO/profile-DTO";
@@ -22,16 +22,16 @@ export default function Profile(): React.ReactNode {
   }, []);
 
   return (
-    <Grid gridTemplateColumns={"55% 45%"} padding={"100px 50px"}>
+    <Grid gridTemplateColumns={"55% 45%"} padding={"100px 50px"} height={"100%"}>
       {profile && <ModalEditProfile isOpen={isOpen} onClose={onClose} profile={profile} setProfile={setProfile}></ModalEditProfile>}
-      <HStack>
+      <HStack height={"100%"}>
         <VStack width={"100%"} alignItems={"start"} h={"100%"}>
           <Text color={"brand.active"} textAlign={"start"} mb={"20px"}>
             <b>My Profile</b>
           </Text>
           <Grid gap={"20px"} width={"100%"} h={"100%"} templateColumns={"50% 50%"}>
             <Grid width={"100%"} h={"100%"}>
-              <Image src={profileImage} width={"100%"} h={"100%"}></Image>
+              <Image src={profile?.content?.profile?.image ?? noImage} width={"100%"} h={"100%"}></Image>
             </Grid>
             <VStack alignItems={"start"}>
               <VStack alignItems={"start"}>
@@ -59,14 +59,17 @@ export default function Profile(): React.ReactNode {
           </Grid>
         </VStack>
       </HStack>
-      <VStack alignItems={"start"} p={"20px"}>
+      <VStack alignItems={"start"} p={"20px"} overflow={"hidden"} height="100%">
         <Text color={"brand.active"} textAlign={"start"} mb={"20px"}>
           <b>My Transaction</b>
         </Text>
-        {profile?.content.profile.Transaction.length !== 0 &&
-          profile?.content.profile.Transaction.map((trans) => {
-            return <ProfileTransaction></ProfileTransaction>;
-          })}
+        <VStack height={"100%"} overflow={"auto"}>
+          {profile?.content?.profile?.Transaction?.length !== 0 &&
+            profile &&
+            [...(profile.content.profile.Transaction ?? [])].reverse().map((trans) => {
+              return <ProfileTransaction transaction={trans}></ProfileTransaction>;
+            })}
+        </VStack>
       </VStack>
     </Grid>
   );

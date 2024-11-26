@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalContent, ModalOverlay, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, Input, Modal, ModalContent, ModalOverlay, Text, VStack } from "@chakra-ui/react";
 import { IoMdArrowBack } from "react-icons/io";
 
 import { Tooltip } from "react-tooltip";
@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "../../../../stores/stores";
 import { CategorySchema, categorySchema } from "../../../../schemas/category-schema";
-import { CreateCategoryAsync, PutCategoryAsync } from "../../../../stores/category/async-category";
-import { CategoryResponseDTO } from "../../../../DTO/category-response-DTO";
+import { PutCategoryAsync } from "../../../../stores/category/async-category";
 import { useLocation } from "react-router-dom";
 import { CategoryDtO } from "../../../../DTO/category-DTO";
 import { ComponentModalPops } from "../../../../types/Component-Modal-Types";
@@ -19,9 +18,7 @@ export default function ModalEditCategory({ isOpen, onClose }: ComponentModalPop
 
   const {
     register,
-    reset,
     handleSubmit,
-    formState: { errors },
     setValue,
   } = useForm<CategorySchema>({
     resolver: zodResolver(categorySchema),
@@ -36,9 +33,9 @@ export default function ModalEditCategory({ isOpen, onClose }: ComponentModalPop
 
   async function onEditCategory(event: CategorySchema) {
     try {
-      const res: CategoryResponseDTO = await dispatch(PutCategoryAsync(event)).unwrap();
+       await dispatch(PutCategoryAsync(event)).unwrap();
       onClose();
-    } catch (err) {}
+    } catch (err) { return err}
   }
 
   return (

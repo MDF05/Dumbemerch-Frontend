@@ -4,7 +4,7 @@ import { CardComponentTypes } from "../types/card-type";
 import nothingImage from "../../../../assets/image/no-image-gallery.png";
 import ButtonAddCart from "./Button-Add-Cart";
 import ChakraLinkExtendReactRouterLink from "./../../../../components/Chakra-LInk-Extend-React-Router-Link";
-import ButtonCheckoutCard from "./Button-Multiple-Checkout";
+import ButtonMultipleCheckout from "./Button-Multiple-Checkout";
 
 export default function CardProduct({ products, onOpen }: CardComponentTypes): React.ReactNode {
   return products.content.map((product, index: number) => {
@@ -15,14 +15,14 @@ export default function CardProduct({ products, onOpen }: CardComponentTypes): R
             <Image src={product?.images[0]?.imageUrl ?? nothingImage} height={"250px"} width={"100%"}></Image>
           </Flex>
           <VStack px={"10px"} alignItems={"start"} w={"100%"}>
-            <Flex color={"brand.active"} textTransform={"capitalize"} mt={"10px"}>
+            <Flex color={"brand.active"} textTransform={"capitalize"} mt={"10px"} maxH={"30px"} flexWrap={"nowrap"} overflow={"hidden"}>
               <b>{product.name}</b>
             </Flex>
             <Flex>Rp.{parseInt(product.price).toLocaleString("id-ID")}</Flex>
             <Flex>Stock : {product.quantity}</Flex>
-            <HStack w={"100%"} mt={"10px"}>
-              <Box width={"50%"} onClick={(event) => event.stopPropagation()}>
-                <ButtonCheckoutCard Product={[product]}></ButtonCheckoutCard>
+            <HStack w={"100%"} mt={"10px"} onClick={(event) => event.stopPropagation()}>
+              <Box width={"50%"}>
+                <ButtonMultipleCheckout Product={[{ countItem: 1, product: product }]}></ButtonMultipleCheckout>
               </Box>
               <Box width={"50%"}>
                 <ButtonAddCart productId={`${product.id}`} bg={"brand.active"} width={"100%"} type="submit"></ButtonAddCart>
