@@ -4,12 +4,12 @@ import dumbmerchLogo from "../../../../assets/image/Frame.png";
 import { ToastContainer } from "react-toastify";
 import ChakraLinkExtendReactRouterLink from "./../../../../components/Chakra-LInk-Extend-React-Router-Link";
 
-export default function BaseAuthLayout(): React.ReactNode {
+export default function BaseAuthLayout() {
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
 
   const navigate = useNavigate()
-  return navigate("/asu")
+  return  (navigate("/asu"))
 
   return (
     <Grid bg={"brand.background"} height={"100vh"} width={"100%"} color={"brand.color"} gridTemplateColumns={"60% 40%"} alignItems={"center"} paddingX={"150px"}>
