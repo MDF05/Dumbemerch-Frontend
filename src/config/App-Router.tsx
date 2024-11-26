@@ -4,7 +4,7 @@ import BaseLayout from "../features/USER/base-layout/component/Base-Layout";
 import Home from "../features/USER/home/component/Home";
 import Profile from "../features/USER/profile/component/Profile";
 import ChatComponent from "../features/USER/complain/component/Complain";
-import BaseAuthLayout from "../features/USER/auth/component/Base-Auth-Layout";
+// import BaseAuthLayout from "../features/USER/auth/component/Base-Auth-Layout";
 import Login from "../features/USER/auth/login/component/Login";
 import Register from "../features/USER/auth/register/component/Register";
 import AdminBaseLayout from "../features/ADMIN/base-layout/component/Admin-Base-Layout";
@@ -33,13 +33,13 @@ export default function AppRouter() {
       ],
     },
     {
-      path: "/",
-      element: <BaseAuthLayout />,
-      children: [
-        { path: "login", element: <Login /> },
-        { path: "register", element: <Register /> },
-      ],
+      path : "/login",
+      element : <Login></Login>
     },
+    {
+      path : "/register",
+      element : <Register></Register>
+    }
   ]);
 
   return <RouterProvider router={router} />;
