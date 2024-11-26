@@ -36,8 +36,8 @@ export default function AppRouter() {
       path: "/",
       element: <BaseAuthLayout />,
       children: [
-        { path: "/login", element: <Login /> },
-        { path: "/register", element: <Register /> },
+        { path: "login", element: <Login /> },
+        { path: "register", element: <Register /> },
       ],
     },
   ]);
