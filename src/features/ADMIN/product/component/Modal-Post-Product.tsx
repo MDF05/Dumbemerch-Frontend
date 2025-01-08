@@ -13,23 +13,18 @@ import ModalDetailImage from "./../../../../components/Modal-Detail-Image";
 import ChakraLinkExtendReactRouterLink from "../../../../components/Chakra-LInk-Extend-React-Router-Link";
 
 export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops) {
-  const {
-    register,
-    reset,
-    handleSubmit,
-    watch,
-  } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) });
+  const { register, reset, handleSubmit, watch } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) });
 
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.categorys);
-  const watchImages:Blob[] = watch("images");
+  const watchImages: Blob[] = watch("images");
   const [listImageURL, setListImageURL] = useState<string[]>([]);
   const { isOpen: isOpenModalImage, onClose: closeModalImage, onOpen: openModalImage } = useDisclosure();
 
   useEffect(() => {
     if (watchImages) {
       console.log(watchImages);
-      const urls = Array.from(watchImages).map((file : Blob) => URL.createObjectURL(file));
+      const urls = Array.from(watchImages).map((file: Blob) => URL.createObjectURL(file));
       setListImageURL(urls);
     }
   }, [watchImages]);
@@ -51,7 +46,9 @@ export default function ModalPostProduct({ isOpen, onClose }: ComponentModalPops
 
       await dispatch(PostProductAsync(formData)).unwrap();
       reset();
-    } catch (err) {}
+    } catch (err) {
+      return err;
+    }
   }
 
   return (

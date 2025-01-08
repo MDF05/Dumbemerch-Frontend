@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
 import { PostMidtransPayment } from "../../../../stores/payment/async-payment";
 import { Cart } from "../../../../DTO/cart-DTO";
-import { PostTransaction } from "../../../../stores/transaction/async-transaction";
+import { PostTransaction } from "../../../../stores/tranwsaction/async-transaction";
 import { TransactionDTO } from "../../../../DTO/transaction-DTO";
 
 declare global {
