@@ -98,4 +98,12 @@ export const listProductsDummy: listDummyTypes[] = [
     price: 100,
     qty: 10,
   },
+  {
+    id: 1,
+    photo: mouseImage,
+    productName: "Product 1",
+    productDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    price: 100,
+    qty: 10,
+  },
 ];
