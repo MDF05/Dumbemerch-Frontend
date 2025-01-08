@@ -10,3 +10,5 @@ export interface CategoryResponseDTO {
   status: number;
   content: CategoryDtO[];
 }
+
+//
