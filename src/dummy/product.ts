@@ -86,6 +86,13 @@ const products: CardDetailTypes[] = [
     stock: 100,
     id: "8",
   },
+  {
+    image: dumbmerclogo,
+    name: "Product 7",
+    price: 100000,
+    stock: 100,
+    id: "8",
+  },
 ];
 
 export default products;
