@@ -10,10 +10,10 @@ import Register from "../features/USER/auth/register/component/Register";
 import AdminBaseLayout from "../features/ADMIN/base-layout/component/Admin-Base-Layout";
 import AdminProduct from "../features/ADMIN/product/component/Admin-Product";
 import AdminCategory from "./../features/ADMIN/category/component/Admin-Category";
+import AdminComplain from "../features/ADMIN/complain/component/Admin-Complain";
 
 export default function AppRouter() {
   const router = createBrowserRouter([
-
     {
       path: "/admin",
       element: <AdminBaseLayout></AdminBaseLayout>,
@@ -21,6 +21,7 @@ export default function AppRouter() {
         { path: "/admin", element: <Home></Home> },
         { path: "/admin/product", element: <AdminProduct></AdminProduct> },
         { path: "/admin/category", element: <AdminCategory></AdminCategory> },
+        { path: "/admin/complain", element: <AdminComplain></AdminComplain> },
       ],
     },
     {
@@ -36,8 +37,8 @@ export default function AppRouter() {
       path: "/",
       element: <BaseAuthLayout></BaseAuthLayout>,
       children: [
-        { path: "/login", element: <Login ></Login> },
-        { path: "/register", element: <Register></Register>},
+        { path: "/login", element: <Login></Login> },
+        { path: "/register", element: <Register></Register> },
       ],
     },
   ]);

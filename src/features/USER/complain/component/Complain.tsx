@@ -1,110 +1,115 @@
-import { Button, FormControl, Grid, HStack, Input, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  Grid,
+  HStack,
+  Input,
+  VStack,
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-
 import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
-import ListChat from "./List-Chat";
-import { listAdmin } from "../utils/list-admin";
-import BoxChatUserLogin from "./User-Login-Box-Chat";
-import BoxChatUser from "./User-Box-Chat";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MessageSchema, messageSchema } from "./../../../../schemas/message-schema";
+import {
+  MessageSchema,
+  messageSchema,
+} from "../../../../schemas/message-schema";
 import { useAppSelector } from "../../../../stores/stores";
 import { ChatDTO } from "../../../../DTO/chat-dto";
+import ListChat from "./List-Chat";
+import BoxChatUserLogin from "./User-Login-Box-Chat";
+import BoxChatUser from "./User-Box-Chat";
+import { socket } from "../../../../lib/socket";
+import { listAdmin } from "../utils/list-admin";
 
 const ChatComponent = () => {
-  const { register, handleSubmit, reset } = useForm<MessageSchema>({ resolver: zodResolver(messageSchema) });
-
-  const [socketConnection, setSocketConnection] = useState<Socket>();
-
-  const [receiverId, setReceiverId] = useState<number | null>(null);
-  const [chats, setChats] = useState<ChatDTO[]>([]);
-
-  const [roomAdmin, setRoomAdmin] = useState<any>([]);
+  const { register, handleSubmit, reset } = useForm<MessageSchema>({
+    resolver: zodResolver(messageSchema),
+  });
 
   const auth = useAppSelector((state) => state.auth);
   const senderId = auth?.user?.id;
+  const [receiverId, setReceiverId] = useState<number | null>(null);
+  const [chats, setChats] = useState<ChatDTO[]>([]);
 
   useEffect(() => {
-    setSocketConnection(io("http://localhost:3000"));
-    socketConnection?.on("data message", (data) => {
+    if (!senderId) return;
+
+    // Terima pesan baru
+    socket.on("data message", (data) => {
       setChats((prev) => [...prev, data]);
     });
 
-    if (receiverId && auth.user?.role == "USER") {
-      const roomId = `${receiverId}${senderId}`;
-      socketConnection?.emit("send to server", { roomId, senderId, receiverId }); // cliet to server
+    return () => {
+      socket.off("data message");
+    };
+  }, [senderId]);
 
-      socketConnection?.on("send history to client", (data) => {
-        setChats(data.chats);
-      });
+  // Ketika user memilih admin untuk chat
+  useEffect(() => {
+    if (!receiverId || !senderId) return;
 
-      socketConnection?.on("data message", (msg) => {
-        console.log("New message:", msg);
-      });
+    const roomId = `${receiverId}${senderId}`;
+    socket.emit("send to server", { roomId, senderId, receiverId });
 
-      return () => {
-        socketConnection?.disconnect();
-      };
-    } else if (auth.user?.role == "ADMIN" && receiverId == null) {
-      socketConnection?.emit("get room admin", { roomId: null, senderId, receiverId: null });
+    socket.on("send history to client", (data) => {
+      setChats(data.chats);
+    });
 
-      socketConnection?.on("send room admin", (data) => {
-        setRoomAdmin(data);
-      });
-    } else if (auth.user?.role == "ADMIN" && receiverId != null) {
-      const roomId = `${senderId}${receiverId}`;
-      socketConnection?.emit("send to server", { roomId, senderId, receiverId }); // cliet to server
-      socketConnection?.on("send history to client", (data) => {
-        // event listener from server
-        setChats(data.chats);
-      });
-    }
-  }, [senderId, receiverId, auth?.user?.role]);
-
-  // const divRef = useRef();
-
-  // const scrollToElement = () => {
-  //   const { current } = divRef;
-  //   if (current !== null) {
-  //     current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // };
+    return () => {
+      socket.off("send history to client");
+    };
+  }, [receiverId, senderId]);
 
   const handleSendMessage = (data: { message: string }) => {
-    const roomId: string = auth.user?.role === "USER" ? `${receiverId}${senderId}` : `${senderId}${receiverId}`;
-    const message = { message: data.message, roomId, senderId, receiverId };
-    socketConnection?.emit("message", message);
+    if (!receiverId || !senderId) return;
+    const roomId = `${receiverId}${senderId}`;
+    socket.emit("message", {
+      message: data.message,
+      roomId,
+      senderId,
+      receiverId,
+    });
     reset();
   };
 
   return (
-    <Grid height={"100vh"} gridTemplateColumns={"30% 70%"}>
-      <VStack height={"100%"} borderRight={"1px solid"} borderColor={"brand.darkColor"} pt={"70px"}>
-        <ListChat listChat={auth?.user?.role === "USER" ? listAdmin : roomAdmin} handleroom={setReceiverId} cursor={"pointer"}></ListChat>
+    <Grid height="100vh" gridTemplateColumns="30% 70%">
+      <VStack borderRight="1px solid" borderColor="brand.darkColor" pt="70px">
+        <ListChat
+          listChat={listAdmin}
+          handleroom={setReceiverId}
+          cursor="pointer"
+        />
       </VStack>
-      <VStack height={"100%"} padding={"20px"} position={"relative"} width={"100%"} overflow={"hidden"} display={"flex"} justifyContent={"end"}>
-        <VStack width={"100%"} justifyContent={"start"} gap={"20px"} overflowY={"scroll"} overflowX={"hidden"} pt={"50px"}>
-          {chats.map((data, key) => {
-            return data.senderId == auth.user?.id ? (
-              <BoxChatUserLogin justifyContent="end" key={key}>
-                {data.message}
-              </BoxChatUserLogin>
+
+      <VStack padding="20px" justifyContent="end" overflow="hidden">
+        <VStack width="100%" gap="20px" overflowY="scroll" pt="50px">
+          {chats.map((data, key) =>
+            data.senderId === senderId ? (
+              <BoxChatUserLogin key={key}>{data.message}</BoxChatUserLogin>
             ) : (
-              <BoxChatUser justifyContent="start" key={key}>
-                {data.message}
-              </BoxChatUser>
-            );
-          })}
-        </VStack>
-        <HStack w={"100%"} height={"10%"} as={"form"} onSubmit={handleSubmit((data) => handleSendMessage(data))} bottom={"0px"} left={"0px"}>
-          {receiverId && (
-            <FormControl>
-              <Input bg={"brand.backgroundBlur"} placeholder="Send your message" {...register("message")}></Input>
-              <Button type="submit" hidden></Button>
-            </FormControl>
+              <BoxChatUser key={key}>{data.message}</BoxChatUser>
+            )
           )}
-        </HStack>
+        </VStack>
+
+        {receiverId && (
+          <HStack
+            as="form"
+            onSubmit={handleSubmit(handleSendMessage)}
+            width="100%"
+            height="10%"
+          >
+            <FormControl>
+              <Input
+                bg="brand.backgroundBlur"
+                placeholder="Send your message"
+                {...register("message")}
+              />
+              <Button type="submit" hidden />
+            </FormControl>
+          </HStack>
+        )}
       </VStack>
     </Grid>
   );

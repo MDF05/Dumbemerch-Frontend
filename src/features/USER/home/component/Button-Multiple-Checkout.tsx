@@ -1,11 +1,14 @@
 import { Box, Button } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { CheckOutSchema, checkoutSchema } from "../../../../schemas/checkout-schema";
+import {
+  CheckOutSchema,
+  checkoutSchema,
+} from "../../../../schemas/checkout-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "../../../../stores/stores";
 import { PostMidtransPayment } from "../../../../stores/payment/async-payment";
 import { Cart } from "../../../../DTO/cart-DTO";
-import { PostTransaction } from "../../../../stores/tranwsaction/async-transaction";
+import { PostTransaction } from "../../../../stores/transaction/async-transaction";
 import { TransactionDTO } from "../../../../DTO/transaction-DTO";
 
 declare global {
@@ -18,18 +21,28 @@ interface ButtonCheckoutProps {
   Product: Cart[];
 }
 
-export default function ButtonMultipleCheckout({ Product }: ButtonCheckoutProps): React.ReactNode {
-  const { handleSubmit, setValue } = useForm<CheckOutSchema>({ resolver: zodResolver(checkoutSchema) });
+export default function ButtonMultipleCheckout({
+  Product,
+}: ButtonCheckoutProps): React.ReactNode {
+  const { handleSubmit, setValue } = useForm<CheckOutSchema>({
+    resolver: zodResolver(checkoutSchema),
+  });
   const auth = useAppSelector((state) => state.auth);
   const user = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
 
   if (Product.length !== 0) {
-    const totalPrice = Product.reduce((a, b) => a + b.countItem * +b?.product?.price, 0);
+    const totalPrice = Product.reduce(
+      (a, b) => a + b.countItem * +b?.product?.price,
+      0
+    );
     setValue("totalPrice", totalPrice);
     setValue("userDetail.email", `${auth.user?.email}`);
     setValue("userDetail.id", auth.user?.id ?? 0);
-    setValue("userDetail.address", `${user?.profile?.content?.profile?.address}`);
+    setValue(
+      "userDetail.address",
+      `${user?.profile?.content?.profile?.address}`
+    );
     setValue("userDetail.phone", `${user?.profile?.content?.profile?.phone}`);
     setValue("userDetail.name", `${user?.profile?.content?.profile?.name}`);
     setValue(
@@ -44,7 +57,7 @@ export default function ButtonMultipleCheckout({ Product }: ButtonCheckoutProps)
           category: `${cart?.product?.categoryId}`,
           images: "",
         };
-      }),
+      })
     );
   }
 
@@ -55,7 +68,17 @@ export default function ButtonMultipleCheckout({ Product }: ButtonCheckoutProps)
       if (data.succes)
         window.snap.pay(`${data.content.token}`, {
           onSuccess: (res: any) => {
-            const { fraud_status, gross_amount, order_id, payment_type, status_code, status_message, transaction_id, transaction_status, transaction_time } = res;
+            const {
+              fraud_status,
+              gross_amount,
+              order_id,
+              payment_type,
+              status_code,
+              status_message,
+              transaction_id,
+              transaction_status,
+              transaction_time,
+            } = res;
 
             const dataTransaction: TransactionDTO[] = Product.map((data) => {
               return {
@@ -105,7 +128,11 @@ export default function ButtonMultipleCheckout({ Product }: ButtonCheckoutProps)
   }
 
   return (
-    <Box as="form" onSubmit={handleSubmit((event) => onCheckOut(event))} width={"100%"}>
+    <Box
+      as="form"
+      onSubmit={handleSubmit((event) => onCheckOut(event))}
+      width={"100%"}
+    >
       <Button bg={"brand.active"} width={"100%"} type={"submit"}>
         CheckOut
       </Button>

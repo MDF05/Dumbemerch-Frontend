@@ -10,12 +10,27 @@ export default function Home(): React.ReactNode {
 
   return (
     <VStack p={"50px 10px"} mt={"30px"} height={"100%"}>
-      <ModalDetailProduct isOpen={isOpen} onClose={onClose}></ModalDetailProduct>
+      <ModalDetailProduct
+        isOpen={isOpen}
+        onClose={onClose}
+      ></ModalDetailProduct>
       <Flex color={"brand.active"} width={"100%"} mb={"10px"} ps={"100px"}>
         <b>Product</b>
       </Flex>
-      <HStack width={"100%"} rowGap={"40px"} columnGap={"20px"} wrap={"wrap"} height={"100%"} overflow={"auto"} display={"flex"} justifyContent={"center"} paddingBottom={"100px"}>
-        {state.products?.succes && <CardProduct products={state.products} onOpen={onOpen}></CardProduct>}
+      <HStack
+        width={"100%"}
+        rowGap={"40px"}
+        columnGap={"20px"}
+        wrap={"wrap"}
+        height={"100%"}
+        overflow={"auto"}
+        display={"flex"}
+        justifyContent={"center"}
+        paddingBottom={"100px"}
+      >
+        {state.products?.succes && (
+          <CardProduct products={state.products} onOpen={onOpen}></CardProduct>
+        )}
       </HStack>
     </VStack>
   );
