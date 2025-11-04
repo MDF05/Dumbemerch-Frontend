@@ -10,7 +10,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import {
   BarChart,
   Bar,
@@ -52,7 +51,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <Box p={10} color="white">
+    <Box p={10} color="white" pt={"20"} h={"100vh"} overflowY={"scroll"}>
       <Flex justify="space-between" align="center" mb={6}>
         <Text
           fontSize="3xl"
@@ -66,7 +65,7 @@ export default function AdminDashboard() {
           w="200px"
           bg="red.700"
           border="none"
-          color="white"
+          color="black"
           onChange={(e) => setPeriod(e.target.value)}
           value={period}
         >
@@ -80,20 +79,20 @@ export default function AdminDashboard() {
       <SimpleGrid columns={[1, 2, 4]} spacing={6}>
         <Stat bg={bg} p={5} rounded="2xl" boxShadow="lg">
           <StatLabel>Products</StatLabel>
-          <StatNumber>{stats?.products}</StatNumber>
+          <StatNumber>{stats?.products || 0}</StatNumber>
         </Stat>
         <Stat bg={bg} p={5} rounded="2xl" boxShadow="lg">
           <StatLabel>Users</StatLabel>
-          <StatNumber>{stats.users}</StatNumber>
+          <StatNumber>{stats?.users || 0}</StatNumber>
         </Stat>
         <Stat bg={bg} p={5} rounded="2xl" boxShadow="lg">
           <StatLabel>Carts</StatLabel>
-          <StatNumber>{stats.carts}</StatNumber>
+          <StatNumber>{stats?.carts || 0} </StatNumber>
         </Stat>
         <Stat bg={bg} p={5} rounded="2xl" boxShadow="lg">
           <StatLabel>Sales</StatLabel>
           <StatNumber>
-            Rp {stats.totalSales?.toLocaleString("id-ID")}
+            Rp {stats?.totalSales?.toLocaleString("id-ID") || 0}
           </StatNumber>
         </Stat>
       </SimpleGrid>

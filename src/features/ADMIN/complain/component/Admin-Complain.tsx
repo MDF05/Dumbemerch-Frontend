@@ -35,7 +35,9 @@ const AdminComplain = () => {
   useEffect(() => {
     socket.emit("get_user_list");
     socket.on("user_list", (data) => setUsers(data));
-    return () => socket.off("user_list");
+    return () => {
+      socket.off("user_list");
+    };
   }, []);
 
   // Join room dan ambil history

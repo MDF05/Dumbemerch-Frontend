@@ -35,7 +35,10 @@ const ChatComponent = () => {
   useEffect(() => {
     socket.emit("get_admin_list");
     socket.on("admin_list", (data) => setAdmins(data));
-    return () => socket.off("admin_list");
+
+    return () => {
+      socket.off("admin_list"); // <-- panggil tapi tidak dikembalikan
+    };
   }, []);
 
   // Join room dan ambil riwayat
