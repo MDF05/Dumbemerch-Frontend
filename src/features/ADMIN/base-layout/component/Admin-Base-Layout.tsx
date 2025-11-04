@@ -3,174 +3,191 @@
 import {
   Box,
   Flex,
-  Avatar,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  useColorModeValue,
   Stack,
-  Center,
   Image,
   Grid,
+  useDisclosure,
   Input,
-  Text,
 } from "@chakra-ui/react";
-
 import { motion } from "framer-motion";
+
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
 import { Outlet } from "react-router-dom";
+import MenuListDropdown from "../../../ADMIN/base-layout/component/MenuList-Dropdown";
+import { useForm } from "react-hook-form";
+import { useAppDispatch } from "../../../../stores/stores";
+import { GetProductAsync } from "../../../../stores/product/async-product";
+import { SearchSchema } from "../../../../schemas/search-schema";
 import NavLink from "../../../USER/base-layout/component/Nav-Link";
-import ChakraLinkExtendReactRouterLink from "../../../../components/Chakra-LInk-Extend-React-Router-Link";
-import useAdminBaseLayout from "../hooks/use-admin-base-layout";
+import useBaseLayout from "../../../USER/base-layout/hooks/use-base-layout";
+import CartModal from "../../../USER/cart/component/Modal-Cart";
+import IconBadgeCart from "../../../USER/cart/component/Icon-Badge-Cart";
 
 const MotionBox = motion(Box);
 
-export default function AdminBaseLayout() {
-  const { pathname } = useAdminBaseLayout();
+export default function BaseLayout() {
+  const { pathname, user } = useBaseLayout();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { register, handleSubmit } = useForm<SearchSchema>();
+  const dispatch = useAppDispatch();
 
-  const bgColor = useColorModeValue(
-    "rgba(255,255,255,0.6)",
-    "rgba(18,18,18,0.6)"
-  );
-  const navTextColor = useColorModeValue("gray.700", "gray.200");
+  async function onSubmitSearch(event: SearchSchema) {
+    await dispatch(GetProductAsync({ query: event.searchQuery }));
+  }
 
   return (
     <Grid>
-      {/* Navbar */}
+      <CartModal isOpen={isOpen} onClose={onClose} />
+
+      {/* NAVBAR */}
       <MotionBox
-        bg={bgColor}
+        bg="rgba(10, 10, 10, 0.6)"
         backdropFilter="blur(15px)"
-        boxShadow="0 8px 32px rgba(31,38,135,0.2)"
+        boxShadow="0 8px 32px rgba(31, 38, 135, 0.3)"
+        borderBottom="1px solid rgba(255,255,255,0.15)"
         px={6}
         py={2}
         zIndex={10000}
         position="fixed"
         width="100%"
         top={0}
-        animate={{ y: [0, -10, 0] }}
+        animate={{ y: [0, -5, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        borderBottom="1px solid rgba(255,255,255,0.2)"
       >
         <Flex h={16} alignItems="center" justifyContent="space-between">
-          {/* Logo */}
+          {/* LOGO */}
           <MotionBox
+            width="10%"
             whileHover={{ scale: 1.1, rotate: 3 }}
             transition={{ type: "spring", stiffness: 200 }}
           >
             <Image
               src={dumbmerchLogo}
-              width="50px"
-              filter="drop-shadow(0 0 10px rgba(255,255,255,0.4))"
+              width="55px"
+              filter="drop-shadow(0 0 12px rgba(255,255,255,0.3))"
             />
           </MotionBox>
 
-          {/* Search Bar */}
-          <Box width="40%">
+          {/* SEARCH BAR */}
+          <Box
+            width={user?.role === "ADMIN" ? "30%" : "45%"}
+            as="form"
+            onSubmit={handleSubmit((event) => onSubmitSearch(event))}
+          >
             <Input
-              width="100%"
+              {...register("searchQuery")}
               placeholder="Search products..."
-              borderRadius="xl"
-              bg="whiteAlpha.200"
+              bg="rgba(255,255,255,0.1)"
               border="1px solid rgba(255,255,255,0.2)"
               color="white"
               _placeholder={{ color: "gray.400" }}
+              borderRadius="xl"
+              px={4}
+              py={2}
+              transition="all 0.3s ease"
               _focus={{
                 borderColor: "brand.active",
-                boxShadow: "0 0 10px rgba(255,255,255,0.4)",
+                boxShadow: "0 0 12px rgba(255,255,255,0.4)",
               }}
-              transition="all 0.3s ease"
             />
+            <Button type="submit" hidden />
           </Box>
 
-          {/* Navigation Links + Profile */}
-          <Flex alignItems="center" w="50%" justifyContent="flex-end">
-            <Stack direction="row" spacing={6} align="center">
-              {[
-                { name: "Home", path: "/admin" },
-                { name: "Category", path: "/admin/category" },
-                { name: "Product", path: "/admin/product" },
-                { name: "Dashboard", path: "/admin/dashboard" },
-                { name: "Complain", path: "/admin/complain" },
-              ].map((nav) => (
-                <MotionBox
-                  key={nav.path}
-                  whileHover={{
-                    scale: 1.1,
-                    textShadow: "0 0 8px #fff",
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <NavLink
-                    to={nav.path}
-                    color={
-                      pathname === nav.path ? "brand.active" : navTextColor
-                    }
-                    fontWeight="bold"
-                  >
-                    {nav.name}
-                  </NavLink>
-                </MotionBox>
-              ))}
-
-              {/* Profile Menu */}
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded="full"
-                  variant="link"
-                  cursor="pointer"
-                  minW={0}
-                  _hover={{ transform: "scale(1.05)" }}
-                  transition="all 0.3s ease"
-                >
-                  <Avatar
-                    size="sm"
-                    name="Username"
-                    src="https://avatars.dicebear.com/api/male/username.svg"
-                    boxShadow="0 0 12px rgba(255,255,255,0.3)"
+          {/* NAVIGATION */}
+          <Flex
+            alignItems="center"
+            width={user?.role === "ADMIN" ? "60%" : "40%"}
+            justifyContent="end"
+          >
+            <Stack direction="row" spacing={7} align="center">
+              {/* Common links */}
+              <NavItem to="/" active={pathname === "/"} label="Home" />
+              {user?.role === "ADMIN" && (
+                <>
+                  <NavItem
+                    to="/admin/category"
+                    active={pathname === "/admin/category"}
+                    label="Category"
                   />
-                </MenuButton>
-                <MenuList
-                  bg={useColorModeValue("whiteAlpha.900", "gray.800")}
-                  boxShadow="xl"
-                  borderRadius="lg"
-                  border="1px solid rgba(255,255,255,0.2)"
+                  <NavItem
+                    to="/admin/product"
+                    active={pathname === "/admin/product"}
+                    label="Product"
+                  />
+                  <NavItem
+                    to="/admin/dashboard"
+                    active={pathname === "/admin/dashboard"}
+                    label="Dashboard"
+                  />
+                </>
+              )}
+              <NavItem
+                to="/admin/complain"
+                active={pathname === "/admin/complain"}
+                label="Complain"
+              />
+
+              {/* CART */}
+              <MotionBox
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onOpen}
+                cursor="pointer"
+              >
+                <NavLink
+                  to=""
+                  color={pathname === "/" ? "brand.active" : "brand.baseColor"}
+                  display="flex"
+                  alignItems="center"
+                  gap="5px"
                 >
-                  <Center py={3} flexDir="column" gap={2}>
-                    <Avatar
-                      size="2xl"
-                      src="https://avatars.dicebear.com/api/male/username.svg"
-                    />
-                    <Text fontWeight="bold">Username</Text>
-                  </Center>
-                  <MenuDivider />
-                  <MenuItem _hover={{ bg: "brand.active", color: "white" }}>
-                    <ChakraLinkExtendReactRouterLink
-                      to="/profile/me"
-                      width="100%"
-                      display="flex"
-                      justifyContent="start"
-                    >
-                      My Profile
-                    </ChakraLinkExtendReactRouterLink>
-                  </MenuItem>
-                  <MenuItem _hover={{ bg: "red.400", color: "white" }}>
-                    Logout
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+                  Cart
+                  <IconBadgeCart
+                    color={
+                      pathname === "/" ? "brand.active" : "brand.baseColor"
+                    }
+                  />
+                </NavLink>
+              </MotionBox>
+
+              {/* PROFILE MENU */}
+              <MenuListDropdown />
             </Stack>
           </Flex>
         </Flex>
       </MotionBox>
 
-      {/* Page Content */}
-      <Box mt="90px" px={6}>
+      {/* CONTENT AREA */}
+      <Box height="100vh" bg="blackAlpha.900">
         <Outlet />
       </Box>
     </Grid>
+  );
+}
+
+// === Reusable Animated Nav Item ===
+function NavItem({
+  to,
+  active,
+  label,
+}: {
+  to: string;
+  active: boolean;
+  label: string;
+}) {
+  return (
+    <MotionBox
+      whileHover={{ scale: 1.1, textShadow: "0 0 10px rgba(255,255,255,0.8)" }}
+      transition={{ duration: 0.3 }}
+    >
+      <NavLink
+        to={to}
+        color={active ? "brand.active" : "brand.baseColor"}
+        fontWeight="bold"
+      >
+        {label}
+      </NavLink>
+    </MotionBox>
   );
 }

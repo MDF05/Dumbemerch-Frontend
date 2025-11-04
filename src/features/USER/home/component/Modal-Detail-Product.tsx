@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
-import noImage from "../../../../assets/image/no-image-gallery.png";
+import noImage from "../../../../assets/image/Frame.png";
 import { IoMdArrowBack } from "react-icons/io";
 import { Tooltip } from "react-tooltip";
 import { useLocation } from "react-router-dom";
@@ -107,7 +107,7 @@ export default function ModalDetailProduct({
                 width="100%"
                 height={["250px", "350px", "400px"]}
               >
-                {(product?.images?.length ?? 0) > 0
+                {product?.images?.length > 0
                   ? product.images.map((image: ImageDTO, index: number) => (
                       <Image
                         key={index}
@@ -121,7 +121,7 @@ export default function ModalDetailProduct({
                   : [
                       <Image
                         key="noimage"
-                        src={noImage}
+                        data-src={noImage}
                         borderRadius="xl"
                         objectFit="cover"
                         width="100%"

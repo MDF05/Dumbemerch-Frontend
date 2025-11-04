@@ -8,7 +8,11 @@ export interface initialStateCart {
   loading: boolean;
 }
 
-const initialState: initialStateCart = {} as initialStateCart;
+const initialState: initialStateCart = {
+  countCartUser: 0,
+  carts: [],
+  loading: false,
+};
 
 const CartSlice = createSlice({
   name: "cart",
@@ -19,12 +23,34 @@ const CartSlice = createSlice({
       state.carts = action.payload.carts;
       state.loading = false;
     },
+
+    // ✅ Tambahan: untuk tombol +
+    incrementItem(state, action: PayloadAction<number>) {
+      const item = state.carts.find(
+        (cart) => cart.product.id === action.payload
+      );
+      if (item) {
+        item.countItem += 1;
+      }
+    },
+
+    // ✅ Tambahan: untuk tombol -
+    decrementItem(state, action: PayloadAction<number>) {
+      const item = state.carts.find(
+        (cart) => cart.product.id === action.payload
+      );
+      if (item && item.countItem > 1) {
+        item.countItem -= 1;
+      }
+    },
   },
+
   extraReducers(builder) {
     builder
       .addCase(PostCartAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.countCartUser = state.countCartUser + action.payload.content.addCart;
+        state.countCartUser =
+          state.countCartUser + action.payload.content.addCart;
       })
       .addCase(PostCartAsync.rejected, (state) => {
         state.loading = false;
@@ -32,6 +58,7 @@ const CartSlice = createSlice({
       .addCase(PostCartAsync.pending, (state) => {
         state.loading = true;
       });
+
     builder
       .addCase(GetCartAsync.fulfilled, (state, action) => {
         state.loading = false;
@@ -47,6 +74,5 @@ const CartSlice = createSlice({
   },
 });
 
-export const { setCart } = CartSlice.actions;
-
+export const { setCart, incrementItem, decrementItem } = CartSlice.actions;
 export default CartSlice.reducer;

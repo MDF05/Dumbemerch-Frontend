@@ -11,9 +11,23 @@ export default function BoxChatUser(props: BoxChatProps): React.ReactNode {
   return (
     <HStack width={"100%"} {...restProps}>
       <Avatar></Avatar>
-      <Text background={"brand.chat"} width={"max-content"} padding={"10px"} ms={"20px"} position={"relative"} borderRadius={"5px"}>
+      <Text
+        background={"brand.chat"}
+        width={"max-content"}
+        padding={"10px"}
+        ms={"20px"}
+        position={"relative"}
+        borderRadius={"5px"}
+      >
         {children}
-        <Icon as={RxTriangleLeft} color={"brand.chat"} position={"absolute"} fontSize={"4rem"} top={"-10px "} left={"-35px"} />
+        <Icon
+          as={RxTriangleLeft}
+          color={"brand.chat"}
+          position={"absolute"}
+          fontSize={"4rem"}
+          top={"-10px "}
+          left={"-35px"}
+        />
       </Text>
     </HStack>
   );

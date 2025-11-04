@@ -1,5 +1,13 @@
-import { Button, Grid, HStack, Image, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import noImage from "../../../../assets/image/no-image-gallery.png";
+import {
+  Button,
+  Grid,
+  HStack,
+  Image,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
+import noImage from "../../../../assets/image/avatar.jpg";
 import { useEffect, useState } from "react";
 import ModalEditProfile from "./Modal-Edit-Profile";
 import { ProfileResponseDTO } from "./../../../../DTO/profile-DTO";
@@ -22,37 +30,67 @@ export default function Profile(): React.ReactNode {
   }, []);
 
   return (
-    <Grid gridTemplateColumns={"55% 45%"} padding={"100px 50px"} height={"100%"}>
-      {profile && <ModalEditProfile isOpen={isOpen} onClose={onClose} profile={profile} setProfile={setProfile}></ModalEditProfile>}
+    <Grid
+      gridTemplateColumns={"55% 45%"}
+      padding={"100px 50px"}
+      height={"100%"}
+    >
+      {profile && (
+        <ModalEditProfile
+          isOpen={isOpen}
+          onClose={onClose}
+          profile={profile}
+          setProfile={setProfile}
+        ></ModalEditProfile>
+      )}
       <HStack height={"100%"}>
         <VStack width={"100%"} alignItems={"start"} h={"100%"}>
           <Text color={"brand.active"} textAlign={"start"} mb={"20px"}>
             <b>My Profile</b>
           </Text>
-          <Grid gap={"20px"} width={"100%"} h={"100%"} templateColumns={"50% 50%"}>
+          <Grid
+            gap={"20px"}
+            width={"100%"}
+            h={"100%"}
+            templateColumns={"50% 50%"}
+          >
             <Grid width={"100%"} h={"100%"}>
-              <Image src={profile?.content?.profile?.image ?? noImage} width={"100%"} h={"100%"}></Image>
+              <Image
+                src={profile?.content?.profile?.image ?? noImage}
+                width={"100%"}
+                h={"100%"}
+              ></Image>
             </Grid>
             <VStack alignItems={"start"}>
               <VStack alignItems={"start"}>
                 <Text color={"brand.active"}>Name</Text>
-                <Text color={"brand.baseColor"}>{profile?.content.profile.name}</Text>
+                <Text color={"brand.baseColor"}>
+                  {profile?.content.profile.name}
+                </Text>
               </VStack>
               <VStack alignItems={"start"}>
                 <Text color={"brand.active"}>Email</Text>
-                <Text color={"brand.baseColor"}>{profile?.content.profile.user?.email}</Text>
+                <Text color={"brand.baseColor"}>
+                  {profile?.content.profile.user?.email}
+                </Text>
               </VStack>
               <VStack alignItems={"start"}>
                 <Text color={"brand.active"}>Phone</Text>
-                <Text color={"brand.baseColor"}>{profile?.content.profile.phone}</Text>
+                <Text color={"brand.baseColor"}>
+                  {profile?.content.profile.phone}
+                </Text>
               </VStack>
               <VStack alignItems={"start"}>
                 <Text color={"brand.active"}>Gender</Text>
-                <Text color={"brand.baseColor"}>{profile?.content.profile.gender}</Text>
+                <Text color={"brand.baseColor"}>
+                  {profile?.content.profile.gender}
+                </Text>
               </VStack>
               <VStack alignItems={"start"}>
                 <Text color={"brand.active"}>Address</Text>
-                <Text color={"brand.baseColor"}>{profile?.content.profile.address}</Text>
+                <Text color={"brand.baseColor"}>
+                  {profile?.content.profile.address}
+                </Text>
               </VStack>
               <Button onClick={onOpen}>edit profile</Button>
             </VStack>
@@ -66,9 +104,13 @@ export default function Profile(): React.ReactNode {
         <VStack height={"100%"} overflow={"auto"}>
           {profile?.content?.profile?.Transaction?.length !== 0 &&
             profile &&
-            [...(profile.content.profile.Transaction ?? [])].reverse().map((trans) => {
-              return <ProfileTransaction transaction={trans}></ProfileTransaction>;
-            })}
+            [...(profile.content.profile.Transaction ?? [])]
+              .reverse()
+              .map((trans) => {
+                return (
+                  <ProfileTransaction transaction={trans}></ProfileTransaction>
+                );
+              })}
         </VStack>
       </VStack>
     </Grid>

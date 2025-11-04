@@ -14,7 +14,14 @@ export default function ButtonLogout(): React.ReactNode {
   }
 
   return (
-    <Button bg={"transparent"} _hover={{ bg: "transparent" }} padding="0px" w={"full"} onClick={LogOut} justifyContent={"start"}>
+    <Button
+      bg={"transparent"}
+      _hover={{ bg: "transparent" }}
+      padding="0px"
+      w={"full"}
+      onClick={LogOut}
+      justifyContent={"start"}
+    >
       Logout
     </Button>
   );

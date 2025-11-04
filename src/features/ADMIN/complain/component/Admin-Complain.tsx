@@ -28,48 +28,32 @@ const AdminComplain = () => {
   const auth = useAppSelector((state) => state.auth);
   const senderId = auth?.user?.id;
   const [receiverId, setReceiverId] = useState<number | null>(null);
+  const [users, setUsers] = useState<any[]>([]);
   const [chats, setChats] = useState<ChatDTO[]>([]);
-  const [roomAdmin, setRoomAdmin] = useState<any[]>([]);
 
-  // Ambil daftar user yang kirim pesan ke admin
+  // Load daftar user
   useEffect(() => {
-    if (!senderId) return;
+    socket.emit("get_user_list");
+    socket.on("user_list", (data) => setUsers(data));
+    return () => socket.off("user_list");
+  }, []);
 
-    socket.emit("get room admin", { senderId });
-    socket.on("send room admin", (data) => {
-      setRoomAdmin(data);
-    });
-
-    return () => {
-      socket.off("send room admin");
-    };
-  }, [senderId]);
-
-  // Ketika admin pilih user
+  // Join room dan ambil history
   useEffect(() => {
     if (!receiverId || !senderId) return;
-
-    const roomId = `${senderId}${receiverId}`;
-    socket.emit("send to server", { roomId, senderId, receiverId });
-
-    socket.on("send history to client", (data) => {
-      setChats(data.chats);
-    });
-
-    socket.on("data message", (msg) => {
-      setChats((prev) => [...prev, msg]);
-    });
-
+    socket.emit("join_room", { senderId, receiverId });
+    socket.on("load_history", (data) => setChats(data));
+    socket.on("new_message", (data) => setChats((prev) => [...prev, data]));
     return () => {
-      socket.off("send history to client");
-      socket.off("data message");
+      socket.off("load_history");
+      socket.off("new_message");
     };
   }, [receiverId, senderId]);
 
   const handleSendMessage = (data: { message: string }) => {
     if (!receiverId || !senderId) return;
-    const roomId = `${senderId}${receiverId}`;
-    socket.emit("message", {
+    const roomId = [senderId, receiverId].sort((a, b) => a - b).join("-");
+    socket.emit("send_message", {
       message: data.message,
       roomId,
       senderId,
@@ -80,9 +64,9 @@ const AdminComplain = () => {
 
   return (
     <Grid height="100vh" gridTemplateColumns="30% 70%">
-      <VStack borderRight="1px solid" borderColor="brand.darkColor" pt="70px">
+      <VStack borderRight="1px solid" borderColor="gray.700" pt="70px">
         <ListChat
-          listChat={roomAdmin}
+          listChat={users}
           handleroom={setReceiverId}
           cursor="pointer"
         />

@@ -11,6 +11,7 @@ import AdminBaseLayout from "../features/ADMIN/base-layout/component/Admin-Base-
 import AdminProduct from "../features/ADMIN/product/component/Admin-Product";
 import AdminCategory from "./../features/ADMIN/category/component/Admin-Category";
 import AdminComplain from "../features/ADMIN/complain/component/Admin-Complain";
+import AdminDashboard from "../features/ADMIN/dashboard/Dasboard";
 
 export default function AppRouter() {
   const router = createBrowserRouter([
@@ -22,6 +23,7 @@ export default function AppRouter() {
         { path: "/admin/product", element: <AdminProduct></AdminProduct> },
         { path: "/admin/category", element: <AdminCategory></AdminCategory> },
         { path: "/admin/complain", element: <AdminComplain></AdminComplain> },
+        { path: "/admin/dashboard", element: <AdminDashboard /> },
       ],
     },
     {

@@ -23,6 +23,9 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../../stores/stores";
 import { GetProductAsync } from "../../../../stores/product/async-product";
 import { SearchSchema } from "../../../../schemas/search-schema";
+import { useEffect } from "react";
+import { setProfile } from "../../../../stores/profile/slice.-profile";
+import { getProfileByIdUserLogin } from "../../../../stores/profile/async-profile";
 
 const MotionBox = motion(Box);
 
@@ -35,6 +38,15 @@ export default function BaseLayout() {
   async function onSubmitSearch(event: SearchSchema) {
     await dispatch(GetProductAsync({ query: event.searchQuery }));
   }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const state = await dispatch(getProfileByIdUserLogin()).unwrap();
+        setProfile(state);
+      } catch (e) {}
+    })();
+  }, []);
 
   return (
     <Grid>
@@ -120,13 +132,20 @@ export default function BaseLayout() {
                     active={pathname === "/admin/dashboard"}
                     label="Dashboard"
                   />
+                  <NavItem
+                    to="/admin/complain"
+                    active={pathname === "/admin/complain"}
+                    label="Complain"
+                  />
                 </>
               )}
-              <NavItem
-                to="/complain"
-                active={pathname === "/complain"}
-                label="Complain"
-              />
+              {user?.role !== "ADMIN" && (
+                <NavItem
+                  to="/complain"
+                  active={pathname === "/complain"}
+                  label="Complain"
+                />
+              )}
 
               {/* CART */}
               <MotionBox
@@ -159,7 +178,7 @@ export default function BaseLayout() {
       </MotionBox>
 
       {/* CONTENT AREA */}
-      <Box height="100vh" mt="90px" bg="blackAlpha.900">
+      <Box height="100vh" bg="blackAlpha.900">
         <Outlet />
       </Box>
     </Grid>
