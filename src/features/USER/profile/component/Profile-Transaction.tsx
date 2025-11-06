@@ -1,7 +1,6 @@
 import { Box, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import dumbMerchLogo from "../../../../assets/image/Frame.png";
-import noImage from "../../../../assets/image/avatar.jpg";
 import { ProductDTO } from "../../../../DTO/product-DTO";
 import detailDatePost from "../../../../utils/detail-date-post";
 

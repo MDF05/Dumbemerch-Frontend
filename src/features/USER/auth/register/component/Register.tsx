@@ -1,5 +1,4 @@
 // RegisterModern.tsx
-import React from "react";
 import { Box, VStack, Text, Button } from "@chakra-ui/react";
 import InputFormEnhanced, {
   detailInputForm,

@@ -14,19 +14,15 @@ import ChakraLinkExtendReactRouterLink from "../../../../components/Chakra-LInk-
 import ButtonLogout from "./Button-Logout";
 import { useAppSelector } from "../../../../stores/stores";
 import noImage from "../../../../assets/image/avatar.jpg";
-import { NavItem } from "../../../USER/base-layout/component/Base-Layout";
 import useBaseLayout from "../../../USER/base-layout/hooks/use-base-layout";
-import NavLink from "../../../USER/base-layout/component/Nav-Link";
-import IconBadgeCart from "../../../USER/cart/component/Icon-Badge-Cart";
-import { motion } from "framer-motion";
 import CartModal from "../../../USER/cart/component/Modal-Cart";
-
-const MotionBox = motion(Box);
 
 export default function MenuListDropdown(): React.ReactNode {
   const state = useAppSelector((state) => state.profile);
-  const { pathname, user } = useBaseLayout();
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  // const { pathname, user } = useBaseLayout();
+  const { user } = useBaseLayout();
+  // const { isOpen, onClose, onOpen } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
 
   return (
     <Menu>
