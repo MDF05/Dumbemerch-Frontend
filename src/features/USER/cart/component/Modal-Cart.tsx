@@ -43,7 +43,7 @@ export default function CartModal({ isOpen, onClose }: ComponentModalPops) {
             my={"80px"}
             direction={"column"}
           >
-            <Flex width={"80%"} gap={"20px"}>
+            <Flex width={{ base: "100%", lg: "80%" }} gap={"20px"}>
               <Button
                 onClick={onClose}
                 border={"2px solid skyblue"}
@@ -73,7 +73,6 @@ export default function CartModal({ isOpen, onClose }: ComponentModalPops) {
               />
             </Flex>
             <VStack
-              width={"80%"}
               bg={"brand.blur.background"}
               blur={"brand.blur.webkit"}
               border={"brand.blur.border"}

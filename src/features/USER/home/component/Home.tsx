@@ -14,7 +14,13 @@ export default function Home(): React.ReactNode {
         isOpen={isOpen}
         onClose={onClose}
       ></ModalDetailProduct>
-      <Flex color={"brand.active"} width={"100%"} mb={"10px"} ps={"100px"}>
+      <Flex
+        color={"brand.active"}
+        width={"100%"}
+        mb={"10px"}
+        ps={{ base: "0px", md: "100px" }}
+        justifyContent={{ base: "center", md: "start" }}
+      >
         <b>Product</b>
       </Flex>
       <HStack
@@ -28,7 +34,7 @@ export default function Home(): React.ReactNode {
         justifyContent={"center"}
         paddingBottom={"100px"}
       >
-        {state.products?.succes && (
+        {state?.products?.succes && (
           <CardProduct products={state.products} onOpen={onOpen}></CardProduct>
         )}
       </HStack>

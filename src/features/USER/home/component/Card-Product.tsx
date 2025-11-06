@@ -35,7 +35,7 @@ export default function CardProduct({
             }}
             position="relative"
             overflow="hidden"
-            width={["90%", "45%", "22%"]}
+            width={{ base: "90%", md: "45%", lg: "22%" }}
             height="430px"
             cursor="pointer"
             _before={{
@@ -50,6 +50,7 @@ export default function CardProduct({
               animation: "spinGlow 6s linear infinite",
               zIndex: 0,
             }}
+            bgColor={"red"}
           >
             <ChakraLinkExtendReactRouterLink
               onClick={onOpen}

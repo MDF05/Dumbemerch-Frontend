@@ -1,13 +1,66 @@
-import { FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
-import { detailInputForm, InputFormTypes } from "../types/input-form-types";
+// InputFormEnhanced.tsx
+import React from "react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  VStack,
+  InputGroup,
+} from "@chakra-ui/react";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
-export default function InputForm({ ElementDetails, registerHook, errors }: InputFormTypes): React.ReactNode {
-  return ElementDetails.map((detail: detailInputForm, index) => {
-    return (
-      <FormControl key={index} isInvalid={errors[detail.inputName] !== undefined}>
-        <Input type={detail.type} placeholder={detail.placeHolder} color={"brand.baseColor"} {...registerHook(detail.inputName)}></Input>
-        {errors[detail.inputName] && <FormErrorMessage>{errors[detail.inputName].message}</FormErrorMessage>}
-      </FormControl>
-    );
-  });
+export type detailInputForm = {
+  placeHolder: string;
+  type: string;
+  inputName: string;
+};
+
+interface Props {
+  ElementDetails: detailInputForm[];
+  registerHook: UseFormRegister<any>;
+  errors: Partial<FieldErrors<any>>;
+}
+
+export default function InputForm({
+  ElementDetails,
+  registerHook,
+  errors,
+}: Props) {
+  return (
+    <VStack spacing={4} align="stretch">
+      {ElementDetails.map((el) => (
+        <FormControl key={el.inputName} isInvalid={!!errors[el.inputName]}>
+          <FormLabel
+            htmlFor={el.inputName}
+            fontSize="xs"
+            color="brand.darkColor"
+            mb={1}
+          >
+            {el.placeHolder}
+          </FormLabel>
+          <InputGroup>
+            <Input
+              id={el.inputName}
+              placeholder={el.placeHolder}
+              type={el.type}
+              {...registerHook(el.inputName as any)}
+              bg="rgba(255,255,255,0.02)"
+              _placeholder={{ color: "whiteAlpha.400" }}
+              border="1px solid rgba(255,255,255,0.06)"
+              _focus={{
+                boxShadow: "0 6px 24px rgba(255,63,63,0.08)",
+                borderColor: "brand.active",
+              }}
+              py={4}
+              borderRadius="10px"
+            />
+          </InputGroup>
+          <FormErrorMessage fontSize="xs" color="red.300">
+            {errors[el.inputName]?.message as any}
+          </FormErrorMessage>
+        </FormControl>
+      ))}
+    </VStack>
+  );
 }

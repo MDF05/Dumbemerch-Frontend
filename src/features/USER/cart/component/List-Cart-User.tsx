@@ -127,8 +127,15 @@ export default function ListCartUser(): React.ReactNode {
           p="20px"
           mb="20px"
           mx="15px"
+          h={"max-content"}
         >
-          <HStack width={"100%"} spacing={6} alignItems="flex-start">
+          <HStack
+            width={"100%"}
+            spacing={6}
+            alignItems={{ lg: "flex-start", base: "center" }}
+            display={"flex"}
+            flexDirection={{ base: "column", md: "row" }}
+          >
             <Checkbox
               colorScheme="red"
               size="lg"
@@ -142,8 +149,8 @@ export default function ListCartUser(): React.ReactNode {
 
             <Image
               src={cart.product?.images[0]?.imageUrl ?? noImage}
-              width={"200px"}
-              height={"180px"}
+              width={{ base: "100px", md: "150px", lg: "200px" }}
+              height={{ basae: "100px", md: "140px", lg: "180px" }}
               borderRadius="xl"
               objectFit="cover"
               boxShadow="0 5px 15px rgba(255,0,0,0.3)"
@@ -169,6 +176,8 @@ export default function ListCartUser(): React.ReactNode {
                 mt={"10px"}
                 justifyContent={"space-between"}
                 alignItems={"center"}
+                flexDirection={{ base: "column", md: "row" }}
+                gap={"20px"}
               >
                 {/* Quantity Control */}
                 <Flex gap={"10px"} alignItems="center">

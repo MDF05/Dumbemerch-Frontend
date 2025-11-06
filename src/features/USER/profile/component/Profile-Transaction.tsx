@@ -26,29 +26,28 @@ export default function ProfileTransaction({
       bg={"brand.backgroundBlur"}
       p={"10px 50px 10px 20px"}
     >
-      <HStack>
+      <HStack width={"400px"}>
         <Image
-          src={transaction?.product?.images[0]?.imageUrl ?? noImage}
+          src={transaction?.product?.images[0]?.imageUrl ?? dumbMerchLogo}
           width={"100px"}
         ></Image>
-        <VStack>
+        <VStack width={"250px"}>
           <Box>
             <Text color={"brand.active"}>{transaction.product.name}</Text>
-            <Text color={"brand.active"}>
-              {detailDatePost(transaction.createdAt)}
-            </Text>
-            <Text
-              color={"brand.darkColor"}
-            >{`${transaction.countItem} X ${transaction.product.price}`}</Text>
+            <Text color={"grey"}>{detailDatePost(transaction.createdAt)}</Text>
             <Box mt={"20px"}>
-              <Text fontWeight={"bold"}>
-                Sub Total : {transaction.countItem * +transaction.product.price}
+              <Text
+                color={"silver"}
+              >{`${transaction.countItem} X Rp. ${transaction.product.price}`}</Text>
+              <Text fontWeight={"bold"} color={"white"}>
+                Sub Total : Rp.{" "}
+                {transaction.countItem * +transaction.product.price}
               </Text>
             </Box>
           </Box>
         </VStack>
+        <Image src={dumbMerchLogo} width={"50px"}></Image>
       </HStack>
-      <Image src={dumbMerchLogo} width={"80px"}></Image>
     </HStack>
   );
 }

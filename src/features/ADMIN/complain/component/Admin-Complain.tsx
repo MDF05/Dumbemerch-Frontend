@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   Grid,
@@ -65,7 +66,7 @@ const AdminComplain = () => {
   };
 
   return (
-    <Grid height="100vh" gridTemplateColumns="30% 70%">
+    <Grid height="100vh" gridTemplateColumns={{ base: "100%", md: "30% 70%" }}>
       <VStack borderRight="1px solid" borderColor="gray.700" pt="70px">
         <ListChat
           listChat={users}
@@ -74,7 +75,28 @@ const AdminComplain = () => {
         />
       </VStack>
 
-      <VStack padding="20px" justifyContent="end" overflow="hidden">
+      <VStack
+        padding="20px"
+        justifyContent="end"
+        overflow="hidden"
+        position={{ base: "fixed", md: "relative" }}
+        background={"black"}
+        w={"full"}
+        h={"calc(100vh - 50px)"}
+        bottom={receiverId ? "0" : "-100vh"}
+      >
+        <Box
+          position="absolute"
+          top="40px"
+          right="10px"
+          w={"full"}
+          justifyContent={"center"}
+          display={"flex"}
+          onClick={() => setReceiverId(null)}
+        >
+          <Button>Close Chat</Button>
+        </Box>
+
         <VStack width="100%" gap="20px" overflowY="scroll" pt="50px">
           {chats.map((data, key) =>
             data.senderId === senderId ? (

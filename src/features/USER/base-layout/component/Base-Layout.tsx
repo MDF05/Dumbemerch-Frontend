@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
 import NavLink from "./Nav-Link";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import useBaseLayout from "../hooks/use-base-layout";
 import CartModal from "../../cart/component/Modal-Cart";
 import IconBadgeCart from "../../cart/component/Icon-Badge-Cart";
@@ -34,8 +34,10 @@ export default function BaseLayout() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { register, handleSubmit } = useForm<SearchSchema>();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   async function onSubmitSearch(event: SearchSchema) {
+    navigate("/");
     await dispatch(GetProductAsync({ query: event.searchQuery }));
   }
 
@@ -73,6 +75,7 @@ export default function BaseLayout() {
             width="10%"
             whileHover={{ scale: 1.1, rotate: 3 }}
             transition={{ type: "spring", stiffness: 200 }}
+            display={{ base: "none", md: "flex" }}
           >
             <Image
               src={dumbmerchLogo}
@@ -83,7 +86,7 @@ export default function BaseLayout() {
 
           {/* SEARCH BAR */}
           <Box
-            width={user?.role === "ADMIN" ? "30%" : "45%"}
+            width={{ base: "100%", lg: user?.role === "ADMIN" ? "30%" : "45%" }}
             as="form"
             onSubmit={handleSubmit((event) => onSubmitSearch(event))}
           >
@@ -112,7 +115,12 @@ export default function BaseLayout() {
             width={user?.role === "ADMIN" ? "60%" : "40%"}
             justifyContent="end"
           >
-            <Stack direction="row" spacing={7} align="center">
+            <Stack
+              direction="row"
+              spacing={7}
+              align="center"
+              display={{ base: "none", md: "flex" }}
+            >
               {/* Common links */}
               <NavItem to="/" active={pathname === "/"} label="Home" />
               {user?.role === "ADMIN" && (
@@ -147,32 +155,30 @@ export default function BaseLayout() {
                 />
               )}
 
-              {/* CART */}
-              <MotionBox
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onOpen}
-                cursor="pointer"
-              >
-                <NavLink
-                  to=""
-                  color={pathname === "/" ? "brand.active" : "brand.baseColor"}
-                  display="flex"
-                  alignItems="center"
-                  gap="5px"
-                >
-                  Cart
-                  <IconBadgeCart
-                    color={
-                      pathname === "/" ? "brand.active" : "brand.baseColor"
-                    }
-                  />
-                </NavLink>
-              </MotionBox>
-
               {/* PROFILE MENU */}
-              <MenuListDropdown />
             </Stack>
+            {/* CART */}
+            <MotionBox
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onOpen}
+              cursor="pointer"
+              mx={"20px"}
+            >
+              <NavLink
+                to=""
+                color={pathname === "/" ? "brand.active" : "brand.baseColor"}
+                display="flex"
+                alignItems="center"
+                gap="5px"
+              >
+                Cart
+                <IconBadgeCart
+                  color={pathname === "/" ? "brand.active" : "brand.baseColor"}
+                />
+              </NavLink>
+            </MotionBox>
+            <MenuListDropdown />
           </Flex>
         </Flex>
       </MotionBox>
@@ -186,7 +192,7 @@ export default function BaseLayout() {
 }
 
 // === Reusable Animated Nav Item ===
-function NavItem({
+export function NavItem({
   to,
   active,
   label,

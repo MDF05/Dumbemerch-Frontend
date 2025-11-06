@@ -25,16 +25,20 @@ export function ModalCheckout({
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <Grid width={"70%"} gridTemplateColumns={"30% 70%"} gap={"20px"}>
+      <Grid
+        width={{ lg: "70%", base: "90%" }}
+        gridTemplateColumns={{ md: "30% 70%", base: "100%" }}
+        gap={"20px"}
+      >
         <Text
           fontSize={"1.5rem"}
           fontWeight={"bold"}
-          textAlign={"right"}
           color={"lightgreen"}
+          textAlign={{ base: "center", md: "right" }}
         >
           Total : Rp.{totalPrice.toLocaleString("id-ID")}
         </Text>
-        <Grid width={"100%"} justifyContent={"end"}>
+        <Grid width={"100%"} justifyContent={{ md: "end", lg: "center" }}>
           <ButtonMultipleCheckout
             Product={selectedProducts}
           ></ButtonMultipleCheckout>

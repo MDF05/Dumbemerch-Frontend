@@ -19,12 +19,20 @@ import { ModalEditProfileProps } from "../types/modal-edit-profile-props";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "./../../../../stores/stores";
-import { EditProfileSchema, editProfileSchema } from "./../../../../schemas/edit-profile-schema";
+import {
+  EditProfileSchema,
+  editProfileSchema,
+} from "./../../../../schemas/edit-profile-schema";
 import { putProfileUpdate } from "./../../../../stores/profile/async-profile";
 import { ProfileResponseDTO } from "./../../../../DTO/profile-DTO";
 import { useEffect, useState } from "react";
 
-export default function ModalEditProfile({ isOpen, onClose, profile, setProfile }: ModalEditProfileProps): React.ReactNode {
+export default function ModalEditProfile({
+  isOpen,
+  onClose,
+  profile,
+  setProfile,
+}: ModalEditProfileProps): React.ReactNode {
   const { register, handleSubmit, reset, watch } = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
@@ -41,7 +49,7 @@ export default function ModalEditProfile({ isOpen, onClose, profile, setProfile 
   const [imageURL, setImageURL] = useState<string>();
 
   useEffect(() => {
-    if (watchImages) {
+    if (watchImages?.length > 0) {
       setImageURL(URL.createObjectURL(watchImages[0]));
     }
   }, [watchImages]);
@@ -49,22 +57,29 @@ export default function ModalEditProfile({ isOpen, onClose, profile, setProfile 
   async function onSubmitEditProfile(event: EditProfileSchema) {
     try {
       const formData = new FormData();
-      formData.append("name", event.name);
-      formData.append("email", event.email);
-      formData.append("gender", event.gender);
-      formData.append("phone", event.phone);
-      formData.append("address", event.address);
+      formData.append("name", event?.name);
+      formData.append("email", event?.email);
+      formData.append("gender", event?.gender);
+      formData.append("phone", event?.phone);
+      formData.append("address", event?.address);
 
-      if (event.image) {
-        formData.append("image", event.image[0]);
+      if (watchImages) {
+        formData.append("image", event?.image[0]);
       }
 
-      const profileUpdate: ProfileResponseDTO = await dispatch(putProfileUpdate({ profile: formData, profileId: profile.content.profile.id })).unwrap();
-      if (profileUpdate.succes) {
+      const profileUpdate: ProfileResponseDTO = await dispatch(
+        putProfileUpdate({
+          profile: formData,
+          profileId: profile?.content?.profile?.id,
+        })
+      ).unwrap();
+      if (profileUpdate?.succes) {
         setProfile(profileUpdate);
         onClose();
       }
-    } catch (err) { return err}
+    } catch (err) {
+      return err;
+    }
   }
 
   return (
@@ -78,11 +93,22 @@ export default function ModalEditProfile({ isOpen, onClose, profile, setProfile 
         }}
         size={"xl"}
       >
-        <ModalOverlay />
-        <ModalContent as={"form"} onSubmit={handleSubmit((event) => onSubmitEditProfile(event))}>
+        <ModalOverlay background={"rgba(255,255,255,0.4)"} />
+        <ModalContent
+          as={"form"}
+          onSubmit={handleSubmit((event) => onSubmitEditProfile(event))}
+          background={"black"}
+          color={"white"}
+        >
           <ModalHeader>Edit Your Profile</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={6} color={"brand.baseColor"} gap={"5px"} display={"grid"} as={"form"}>
+          <ModalBody
+            pb={6}
+            color={"brand.baseColor"}
+            gap={"5px"}
+            display={"grid"}
+            as={"form"}
+          >
             <HStack display={"grid"} gridTemplateColumns={"50% 50%"}>
               <VStack width={"100%"}>
                 <FormControl>

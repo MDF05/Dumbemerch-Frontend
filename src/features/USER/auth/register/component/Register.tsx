@@ -1,41 +1,65 @@
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
-import InputForm from "../../component/Input-Form";
-import { detailInputForm } from "../../types/input-form-types";
+// RegisterModern.tsx
+import React from "react";
+import { Box, VStack, Text, Button } from "@chakra-ui/react";
+import InputFormEnhanced, {
+  detailInputForm,
+} from "../../../auth/component/Input-Form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useRegister from "../../login/hook/use-register";
-import { registerSchema, RegisterSchema } from "../../../../../schemas/register-schema";
+import {
+  registerSchema,
+  RegisterSchema,
+} from "../../../../../schemas/register-schema";
 
-const inputFormLogin: detailInputForm[] = [
+const inputFormRegister: detailInputForm[] = [
   { placeHolder: "email", type: "email", inputName: "email" },
   { placeHolder: "name", type: "text", inputName: "name" },
   { placeHolder: "password", type: "password", inputName: "password" },
 ];
 
-export default function Register(): React.ReactNode {
+export default function RegisterModern() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterSchema>({ resolver: zodResolver(registerSchema) });
-
   const { loading, onSubmit } = useRegister();
 
   return (
-    <VStack padding={"30px 20px"} gap={"20px"} as={"form"} onSubmit={handleSubmit((data) => onSubmit(data))}>
-      <Box w={"100%"}>
-        <Text color={"brand.baseColor"} fontSize={"2rem"} fontWeight={"bold"}>
-          Register
-        </Text>
-      </Box>
-      <VStack gap={"20px"} w={"100%"}>
-        <InputForm ElementDetails={inputFormLogin} registerHook={register} errors={errors}></InputForm>
-      </VStack>
-      <Box mt={"10px"} color={"brand.baseColor"} width={"100%"}>
-        <Button bg={"brand.active"} width={"100%"} color={"brand.baseColor"} type={"submit"} isLoading={loading}>
+    <form onSubmit={handleSubmit((d) => onSubmit(d))}>
+      <VStack spacing={6} align="stretch">
+        <Box>
+          <Text fontSize="2xl" fontWeight="800" color="brand.baseColor">
+            Create account
+          </Text>
+          <Text mt={1} color="brand.darkColor" fontSize="sm">
+            Create your account to start buying awesome merch.
+          </Text>
+        </Box>
+
+        <InputFormEnhanced
+          ElementDetails={inputFormRegister}
+          registerHook={register}
+          errors={errors}
+        />
+
+        <Button
+          type="submit"
+          isLoading={loading}
+          bg="brand.active"
+          color="white"
+          py={5}
+          borderRadius="12px"
+          _hover={{
+            transform: "translateY(-3px)",
+            boxShadow: "0 12px 40px rgba(255,63,63,0.18)",
+          }}
+          transition="all 160ms ease"
+        >
           Register
         </Button>
-      </Box>
-    </VStack>
+      </VStack>
+    </form>
   );
 }

@@ -31,7 +31,7 @@ export default function Profile(): React.ReactNode {
 
   return (
     <Grid
-      gridTemplateColumns={"55% 45%"}
+      gridTemplateColumns={{ base: "100%", md: "55% 45%" }}
       padding={"100px 50px"}
       height={"100%"}
     >
@@ -52,11 +52,16 @@ export default function Profile(): React.ReactNode {
             gap={"20px"}
             width={"100%"}
             h={"100%"}
-            templateColumns={"50% 50%"}
+            templateColumns={{ base: "100%", md: "50% 50%" }}
           >
             <Grid width={"100%"} h={"100%"}>
               <Image
-                src={profile?.content?.profile?.image ?? noImage}
+                src={
+                  profile?.content?.profile?.image &&
+                  profile?.content?.profile?.image != "undefined"
+                    ? profile.content.profile.image
+                    : noImage
+                }
                 width={"100%"}
                 h={"100%"}
               ></Image>

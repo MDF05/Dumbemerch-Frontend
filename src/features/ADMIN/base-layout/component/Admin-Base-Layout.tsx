@@ -13,7 +13,7 @@ import {
 import { motion } from "framer-motion";
 
 import dumbmerchLogo from "../../../../assets/image/Frame.png";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import MenuListDropdown from "../../../ADMIN/base-layout/component/MenuList-Dropdown";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../../stores/stores";
@@ -31,8 +31,10 @@ export default function BaseLayout() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { register, handleSubmit } = useForm<SearchSchema>();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   async function onSubmitSearch(event: SearchSchema) {
+    navigate("/");
     await dispatch(GetProductAsync({ query: event.searchQuery }));
   }
 
@@ -66,12 +68,13 @@ export default function BaseLayout() {
               src={dumbmerchLogo}
               width="55px"
               filter="drop-shadow(0 0 12px rgba(255,255,255,0.3))"
+              display={{ base: "none", md: "flex" }}
             />
           </MotionBox>
 
           {/* SEARCH BAR */}
           <Box
-            width={user?.role === "ADMIN" ? "30%" : "45%"}
+            width={{ base: "100%", md: user?.role === "ADMIN" ? "30%" : "45%" }}
             as="form"
             onSubmit={handleSubmit((event) => onSubmitSearch(event))}
           >
@@ -138,7 +141,7 @@ export default function BaseLayout() {
                 <NavLink
                   to=""
                   color={pathname === "/" ? "brand.active" : "brand.baseColor"}
-                  display="flex"
+                  display={{ base: "flex" }}
                   alignItems="center"
                   gap="5px"
                 >
@@ -180,6 +183,7 @@ function NavItem({
     <MotionBox
       whileHover={{ scale: 1.1, textShadow: "0 0 10px rgba(255,255,255,0.8)" }}
       transition={{ duration: 0.3 }}
+      display={{ base: "none", md: "flex" }}
     >
       <NavLink
         to={to}
