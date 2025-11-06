@@ -32,6 +32,7 @@ export default function BaseAuthLayout() {
       px={{ base: 6, md: 20, lg: 36 }}
       alignItems="center"
       gap={{ base: 8, md: 0 }}
+      bg={"#1A202C"}
     >
       {/* HERO LEFT */}
       <VStack align="start" spacing={6} position="relative">

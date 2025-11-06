@@ -50,7 +50,6 @@ export default function CardProduct({
               animation: "spinGlow 6s linear infinite",
               zIndex: 0,
             }}
-            bgColor={"red"}
           >
             <ChakraLinkExtendReactRouterLink
               onClick={onOpen}
