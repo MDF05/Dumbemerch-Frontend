@@ -5,7 +5,7 @@ Need help? found a bug? We are here to assist you.
 ## 📫 How to Reach Us
 
 ### 1. GitHub Issues
-For technical issues, bug reports, or feature requests, please use our [GitHub Issues](https://github.com/your-username/dumbmerch-frontend/issues) tracking system.
+For technical issues, bug reports, or feature requests, please use our [GitHub Issues](https://github.com/MDF05/dumbmerch-frontend/issues) tracking system.
 - **Search first**: Your issue might have already been answered.
 - **Be specific**: Provide as much detail as possible.
 
