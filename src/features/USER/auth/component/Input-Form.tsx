@@ -53,6 +53,7 @@ export default function InputForm({
               }}
               py={4}
               borderRadius="10px"
+              color={"white"}
             />
           </InputGroup>
           <FormErrorMessage fontSize="xs" color="red.300">
